@@ -1,12 +1,12 @@
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 function Navbar() {
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-zinc-900 p-6 shadow-lg shadow-black/50">
-            <div className="w-44 flex justify-evenly items-center">
-                <h1>asdasd</h1>
+        <nav className="flex items-center justify-between flex-wrap bg-purple-900/70 p-6 shadow-sm shadow-gray-400">
+            <div className="w-54 flex justify-evenly items-center">
+                <Link className="hover:text-red-300 hover:scale-110 ease-in-out duration-300" to={'/'}><h2 className="font-bold">StMarket App <FontAwesomeIcon icon={faMoneyBillTrendUp} /></h2></Link>
             </div>
             <div className="block lg:hidden">
                 <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
@@ -16,7 +16,15 @@ function Navbar() {
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
                 <div className="text-lg lg:flex-grow">
                     <div className="p-1 w-fit m-auto">
-                        
+                        <Link to={'/'} className="navbar-link"><h5>Home</h5></Link>
+
+                        <Link to={'/dashboard'} className="navbar-link"><h5>Dashboard</h5></Link>
+
+                        <Link to={'/manageStocks'} className="navbar-link"><h5>Manage Stocks</h5></Link>
+
+                        <Link to={'/login'} className="navbar-link"><h5>Login</h5></Link>
+
+                        <Link to={'/signUp'} className="navbar-link"><h5>Signup</h5></Link>
                     </div>
                 </div>
             </div>

@@ -25,14 +25,43 @@ code {
   h3 {
     @apply text-2xl;
   }
+
+  h5{
+    @apply text-sm font-bold;
+  }
+
+  label {
+    @apply font-bold;
+  }
 }
 
 @layer components {
+
+  .header {
+    @apply font-bold;
+  }
+
+  .navbar-link {
+    @apply block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-black hover:text-white ease-in-out duration-300;
+  }
+
+  .card {
+    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto;
+  }
+
   .btn-primary {
-    @apply disabled:opacity-75 disabled:bg-blue-900 bg-blue-900 ease-in-out text-slate-100 duration-300 hover:text-slate-300 hover:bg-slate-900 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+    @apply disabled:opacity-75 disabled:hover:text-slate-100 disabled:bg-pink-800 bg-pink-800 ease-in-out text-slate-100 duration-300 hover:text-white hover:bg-pink-900 w-36 h-10 font-bold shadow-md shadow-gray-300 rounded-md;
   }
 
   .btn-secondary {
     @apply disabled:opacity-75 disabled:bg-neutral-400 bg-neutral-300 ease-in-out text-black duration-300 hover:text-black hover:bg-neutral-500 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+  }
+
+  .form-control {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none;
+  }
+
+  .stock-card {
+    @apply border rounded-md border-gray-300 w-[20rem] h-[20rem] shadow-md mx-auto;
   }
 }
