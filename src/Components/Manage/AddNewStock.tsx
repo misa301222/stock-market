@@ -5,6 +5,7 @@ import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
+import StockCard from "../Cards/StockCard";
 
 interface Stock {
     stockName: string,
@@ -34,7 +35,7 @@ function AddNewStock() {
     }
 
     const handleOnChangeStockDescription = (event: ChangeEvent<HTMLInputElement>) => {
-        setStock(prev => ({ ...prev, stockDesription: event.target.value }));
+        setStock(prev => ({ ...prev, stockDescription: event.target.value }));
     }
 
     const handleOnChangeStockPrice = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,12 +90,12 @@ function AddNewStock() {
                 <hr />
             </div>
 
-            <div className="container mx-auto mt-16">
-                <form onSubmit={handleOnSubmitAddNewStock} className="card p-5 bg-gradient-to-r from-slate-100 via-white to-slate-100">
+            <div className="mt-16 flex flex-row justify-evenly">
+                <form onSubmit={handleOnSubmitAddNewStock} className="mx-0 card p-5">
                     <div className="flex flex-row mb-5">
                         <div className="w-1/5 text-right mr-4">
                             <label>
-                                Stock Name
+                                Stock Name <span className="text-red-600 font-bold">*</span>
                             </label>
                         </div>
 
@@ -111,14 +112,14 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockDescription} className="form-control" type={'text'} maxLength={40} placeholder='Type a Description' />
+                            <input onChange={handleOnChangeStockDescription} className="form-control" type={'text'} maxLength={80} placeholder='Type a Description' />
                         </div>
                     </div>
 
                     <div className="flex flex-row mb-5">
                         <div className="w-1/5 text-right mr-4">
                             <label>
-                                Stock Price
+                                Stock Price <span className="text-red-600 font-bold">*</span>
                             </label>
                         </div>
 
@@ -130,7 +131,7 @@ function AddNewStock() {
                     <div className="flex flex-row mb-5">
                         <div className="w-1/5 text-right mr-4">
                             <label>
-                                Stock Quantity
+                                Stock Quantity <span className="text-red-600 font-bold">*</span>
                             </label>
                         </div>
 
@@ -147,17 +148,28 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockLogoURL} className="form-control" type={'text'} maxLength={40} placeholder='Paste Your Logo URL' />
+                            <input onChange={handleOnChangeStockLogoURL} className="form-control" type={'text'} placeholder='Paste Your Logo URL' />
                         </div>
                     </div>
 
                     <div className="text-center mt-20 mb-10">
-                        <button type="submit" className="btn-primary">Add New Stock</button>
+                        <button type="submit" disabled={!stock.stockName || !stock.stockPrice || !stock.stockQuantity} className="btn-primary">Add New Stock</button>
+                    </div>
+
+                    <div className="mt-10 text-left">
+                        <h5> <span className="text-red-600 font-bold">*</span> Required Data</h5>
                     </div>
 
                 </form>
+
+                <div className="">
+                    <h3 className="font-bold">Preview</h3>
+                    <h5 className="text-gray-400 underline mb-10">This is how your stock will be presented to the world</h5>
+                    <StockCard stock={stock} />
+                </div>
+
             </div>
-        </div>
+        </div >
     )
 }
 

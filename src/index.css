@@ -8,6 +8,7 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f8f8;
 }
 
 code {
@@ -46,7 +47,7 @@ code {
   }
 
   .card {
-    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto;
+    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto bg-gray-50;
   }
 
   .btn-primary {
@@ -58,10 +59,10 @@ code {
   }
 
   .form-control {
-    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none;
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight outline-blue-700 focus:outline-blue-300 focus:ease-in-out focus:duration-300 caret-pink-500;
   }
 
   .stock-card {
-    @apply border rounded-md border-gray-300 w-[20rem] h-[20rem] shadow-md mx-auto;
+    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-gray-200 via-white to-gray-200;
   }
 }
