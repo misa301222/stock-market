@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Navbar() {
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-purple-900/70 p-6 shadow-sm shadow-gray-400">
+        <nav className="flex items-center justify-between flex-wrap bg-gray-200 p-6 shadow-sm shadow-gray-400">
             <div className="w-54 flex justify-evenly items-center">
                 <Link className="hover:text-red-300 hover:scale-110 ease-in-out duration-300" to={'/'}><h2 className="font-bold">StMarket App <FontAwesomeIcon icon={faMoneyBillTrendUp} /></h2></Link>
             </div>

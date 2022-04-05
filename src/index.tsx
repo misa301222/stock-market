@@ -5,12 +5,14 @@ import App from './App';
 import 'tw-elements';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from "react-router-dom";
+import Footer from './Components/Footer/Footer';
 
 // TODO CHANGE THIS AS REACT 18 (NOT AVAILABLE YET)
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <App />
+      <Footer />
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
