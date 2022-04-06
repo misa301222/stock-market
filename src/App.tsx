@@ -7,6 +7,8 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import ManageStocks from './Components/Manage/ManageStocks';
 import AddNewStock from './Components/Manage/AddNewStock';
 import SignUp from './Components/SignUp/SignUp';
+import Browse from './Components/Browse/Browse';
+import BuyStock from './Components/Browse/BuyStock';
 
 function App() {
   const location = useLocation();
@@ -18,6 +20,8 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signUp' element={<SignUp />} />
+        <Route path='/browse' element={<RequireAuth redirectTo='/login'><Browse /></RequireAuth>} />
+        <Route path='/buyStock/:stockName' element={<RequireAuth redirectTo='/login'><BuyStock /></RequireAuth>} />
         <Route path='/dashboard' element={<RequireAuth redirectTo='/login'><Dashboard /></RequireAuth>} />
         <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
         <Route path='/newStock' element={<RequireAuth redirectTo='/login'><AddNewStock /></RequireAuth>} />

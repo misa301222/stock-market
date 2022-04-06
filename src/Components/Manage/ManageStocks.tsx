@@ -188,7 +188,7 @@ function ManageStocks() {
                         <div className="modal-body relative p-4">
                             <div className="flex flex-row">
                                 <div className="w-[30%]">
-                                    <img className="w-80 h-80" src={`${selectedStock?.stockLogoURL ? selectedStock.stockLogoURL : ''}`} />
+                                    <img className="w-80 h-80" src={`${selectedStock?.stockLogoURL ? selectedStock.stockLogoURL : '/images/NotFound.png'}`} />
                                 </div>
 
                                 <div className="w-[70%]">

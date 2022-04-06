@@ -22,6 +22,8 @@ function Navbar() {
 
                         <Link to={'/manageStocks'} className="navbar-link"><h5>Manage Stocks</h5></Link>
 
+                        <Link to={'/browse'} className="navbar-link"><h5>Browse</h5></Link>
+
                         <Link to={'/login'} className="navbar-link"><h5>Login</h5></Link>
 
                         <Link to={'/signUp'} className="navbar-link"><h5>Signup</h5></Link>
