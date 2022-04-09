@@ -70,6 +70,10 @@ code {
     @apply p-2 rounded-md text-white bg-red-500 shadow-md font-bold ease-in-out hover:duration-300 hover:bg-red-700;
   }
 
+  .btn-warning {
+    @apply p-2 w-20 shadow-black/50 shadow-md rounded-lg hover:ease-in-out duration-300 bg-amber-400 hover:bg-amber-600;
+  }
+
   .form-control {
     @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight outline-blue-700 focus:outline-blue-300 focus:ease-in-out focus:duration-300 caret-pink-500;
   }

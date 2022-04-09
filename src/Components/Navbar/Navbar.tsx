@@ -24,6 +24,8 @@ function Navbar() {
 
                         <Link to={'/browse'} className="navbar-link"><h5>Browse</h5></Link>
 
+                        <Link to={'/settings'} className="navbar-link"><h5>Settings</h5></Link>
+
                         <Link to={'/login'} className="navbar-link"><h5>Login</h5></Link>
 
                         <Link to={'/signUp'} className="navbar-link"><h5>Signup</h5></Link>
