@@ -49,6 +49,10 @@ function Browse() {
         });
     }
 
+    const handleClickViewInfo = (stockName: string) => {
+        navigate(`/stockDetailedInfo/${stockName}`);
+    }
+
     return (
         <div>
             <div className="container mx-auto">
@@ -128,9 +132,15 @@ function Browse() {
                                         <h2><b>Current Price:</b> ${selectedStock?.stockPrice}</h2>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md gap-3">
+                            <button type="button"
+                                className="btn-primary"
+                                onClick={() => handleClickViewInfo(selectedStock?.stockName!)}>
+                                View Detailed Info
+                            </button>
+
                             <button type="button"
                                 className="btn-secondary"
                                 onClick={() => setIsOpen(false)}>

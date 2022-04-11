@@ -5,6 +5,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
+import StockCardBig from "../Cards/StockCardBig";
 import UserProfitCard from "../Cards/UserProfitCard";
 
 interface Stock {
@@ -204,30 +205,7 @@ function BuyStock() {
             </div>
 
             <div className="mt-20">
-                <div className="flex flex-row w-[80%] mx-auto border-gray-300 border p-5 rounded-md shadow-md shadow-black/50">
-                    <div className="w-[30%]">
-                        <img className="w-80 h-80" src={`${stock?.stockLogoURL ? stock.stockLogoURL : '/images/NotFound.png'}`} />
-                    </div>
-
-                    <div className="w-[70%]">
-                        <div className="mb-2">
-                            <h1 className="font-bold">{stock?.stockName}</h1>
-                        </div>
-                        <div className="mb-10">
-                            <h5 className="line-clamp-4">{stock?.stockDescription}</h5>
-                        </div>
-                        <div className="mb-2">
-                            <h2><b>Stocks Left:</b> {stock?.stockQuantity}</h2>
-                        </div>
-                        <div className="mb-2">
-                            <h2><b>Current Price:</b> ${stock?.stockPrice}</h2>
-                        </div>
-
-                        <div className="mb-2">
-                            <h2><b>Sold By:</b> {stock?.stockOwner}</h2>
-                        </div>
-                    </div>
-                </div>
+                <StockCardBig stock={stock} />
             </div>
 
             <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">

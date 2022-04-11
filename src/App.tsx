@@ -11,6 +11,7 @@ import Browse from './Components/Browse/Browse';
 import BuyStock from './Components/Browse/BuyStock';
 import ManageStockHistory from './Components/StockHistory/MangeStockHistory';
 import Settings from './Components/Settings/Settings';
+import StockDetailedInfo from './Components/SocksDetailedInfo/StockDetailedInfo';
 
 function App() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function App() {
         <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
         <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
         <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
+        <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
       </Routes>
     </div>
   );
