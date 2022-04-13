@@ -13,10 +13,19 @@ interface Stock {
     stockPrice: number,
     stockQuantity: number,
     stockLogoURL: string,
-    dateAdded: Date,
+    dateAdded: string,
     stockOwner: string
 }
+
+interface StockHistory {
+    stockId: number,
+    stockName: string,
+    stockDate: any,
+    stockPrice: number
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
+const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
 function AddNewStock() {
     const navigate = useNavigate();
@@ -26,7 +35,7 @@ function AddNewStock() {
         stockPrice: 0,
         stockQuantity: 0,
         stockLogoURL: '',
-        dateAdded: new Date,
+        dateAdded: '',
         stockOwner: ''
     });
 
@@ -77,9 +86,22 @@ function AddNewStock() {
         let currentUser: string = authService.getCurrentUser!;
         if (currentUser) {
             let newStock: Stock = stock;
-            newStock.dateAdded = new Date();
+            newStock.dateAdded = new Date().toISOString().split('T')[0];
             newStock.stockOwner = currentUser;
             await saveNewStock(newStock);
+
+            let newStockHistory: StockHistory = {
+                stockId: 0,
+                stockName: newStock.stockName,
+                stockDate: newStock.dateAdded,
+                stockPrice: newStock.stockPrice
+            }
+
+            await axios.post(`${STOCK_HISTORY_URL}`, newStockHistory).then(response => {
+                console.log(response);
+            }).catch(err => {
+                console.log(err);
+            });
         }
     }
 

@@ -1,4 +1,4 @@
-import { faArrowTrendUp, faCircleInfo, faPlus, faSuitcase, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCircleInfo, faFileLines, faPlus, faSuitcase, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -31,6 +31,10 @@ function ManageStocks() {
     const variants = {
         open: { opacity: 1, display: 'block' },
         closed: { opacity: 0, display: 'none' }
+    }
+
+    const handleClickViewInfo = (stockName: string) => {
+        navigate(`/stockDetailedInfo/${stockName}`);
     }
 
     const getStockByOwnerEmail = async () => {
@@ -217,15 +221,16 @@ function ManageStocks() {
                             </div>
                         </div>
                         <div
-                            className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                            className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md gap-5">
                             <button type="button"
-                                className="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                                className="btn-secondary"
                                 onClick={() => setIsOpen(false)}>
                                 Close
                             </button>
                             <button type="button"
-                                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
-                                Save changes
+                                className="btn-primary w-56"
+                                onClick={() => handleClickViewInfo(selectedStock?.stockName!)}>
+                                <FontAwesomeIcon icon={faFileLines} /> View Detailed Info
                             </button>
                         </div>
                     </div>

@@ -23,8 +23,16 @@ interface Stock {
     stockOwner: string
 }
 
+interface UserPortfolio {
+    email: string,
+    stockName: string,
+    stockQuantity: number,
+    stockPrice: number
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
+const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 
 function ManageStockHistory() {
     const [stockHistory, setStockHistory] = useState<StockHistory[]>();
@@ -86,7 +94,7 @@ function ManageStockHistory() {
     const handleOnSubmitNewStockHistory = async (event: SyntheticEvent) => {
         event.preventDefault();
         let addStock: StockHistory = newStockHistory;
-        addStock.stockDate = new Date(addStock.stockDate);
+        addStock.stockDate = new Date(addStock.stockDate).toISOString().split('T')[0];
         await axios.post(`${STOCK_HISTORY_URL}/`, addStock).then(response => {
 
         }).catch(err => {
@@ -131,7 +139,8 @@ function ManageStockHistory() {
     }
 
     const handleOnClickUpdateToday = async () => {
-        let dateToday: string = new Date().toISOString().split('T')[0];
+        let dateToday: string = moment(new Date()).format('YYYY-MM-DD');
+        console.log(dateToday);
 
         const response = await axios.get(`${STOCK_URL}`);
         setStock(response.data);
@@ -157,6 +166,14 @@ function ManageStockHistory() {
                     }).catch(err => {
                         console.log(err);
                     });
+                    
+                    const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
+                    for (let i = 0; i < userPortfolios.data.length; i++) {
+                        let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
+                        modifiedUserPortfolio.stockPrice = editedStock.stockPrice;
+                        await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
+                    }
+
                 } else {
                     let newStockHistory: StockHistory = {
                         stockId: 0,
@@ -176,6 +193,13 @@ function ManageStockHistory() {
                     }).catch(err => {
                         console.log(err);
                     });
+
+                    const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
+                    for (let i = 0; i < userPortfolios.data.length; i++) {
+                        let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
+                        modifiedUserPortfolio.stockPrice = stocks[i].stockPrice
+                        await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
+                    }
                 }
             }
             Swal.fire({

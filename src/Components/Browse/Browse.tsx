@@ -1,4 +1,4 @@
-import { faCircleInfo, faCompass, faFireAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCoins, faCompass, faFileLines, faFireAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
@@ -136,9 +136,9 @@ function Browse() {
                         </div>
                         <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md gap-3">
                             <button type="button"
-                                className="btn-primary"
+                                className="btn-primary w-56"
                                 onClick={() => handleClickViewInfo(selectedStock?.stockName!)}>
-                                View Detailed Info
+                                <FontAwesomeIcon icon={faFileLines} /> View Detailed Info
                             </button>
 
                             <button type="button"
@@ -148,7 +148,7 @@ function Browse() {
                             </button>
                             <button onClick={() => handleOnClickBuyStock(selectedStock?.stockName!)} type="button"
                                 className="btn-primary">
-                                Buy Stocks
+                                <FontAwesomeIcon icon={faCoins} /> Buy Stocks
                             </button>
                         </div>
                     </div>

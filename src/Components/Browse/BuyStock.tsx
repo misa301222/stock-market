@@ -22,6 +22,8 @@ interface StockBought {
     email: string,
     stockName: string,
     quantityBought: number
+    transactionDate: string,
+    transactionTotal: number
 }
 
 interface UserPortfolio {
@@ -101,7 +103,9 @@ function BuyStock() {
                                 let stockBought: StockBought = {
                                     email: currentUser,
                                     stockName: stock?.stockName!,
-                                    quantityBought: quantity
+                                    quantityBought: quantity,
+                                    transactionDate: new Date().toISOString().split('T')[0],
+                                    transactionTotal: stock.stockPrice * quantity
                                 }
 
                                 await axios.post(`${STOCK_BOUGHT_URL}`, stockBought).then(async (response) => {
@@ -133,14 +137,16 @@ function BuyStock() {
                                 let stockBought: StockBought = {
                                     email: currentUser,
                                     stockName: stock?.stockName,
-                                    quantityBought: quantity
+                                    quantityBought: quantity,
+                                    transactionDate: new Date().toISOString().split('T')[0],
+                                    transactionTotal: stock.stockPrice * quantity
                                 }
 
                                 let userPortfolio: UserPortfolio = {
                                     email: currentUser,
                                     stockName: stock.stockName,
                                     stockQuantity: quantity,
-                                    stockPrice: stock.stockPrice
+                                    stockPrice: stock.stockPrice,                                    
                                 }
 
                                 await axios.post(`${STOCK_BOUGHT_URL}`, stockBought).then(async (response) => {

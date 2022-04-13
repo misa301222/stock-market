@@ -1,7 +1,8 @@
-import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
+import { faFolderOpen, faGaugeHigh, faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 import UserProfitCard from "../Cards/UserProfitCard";
@@ -22,6 +23,7 @@ const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 
 function Dashboard() {
+    const navigate = useNavigate();
     const [userPortfolio, setUserPortfolio] = useState<UserPortfolio[]>();
     const [userProfit, setUserProfit] = useState<UserProfit>();
 
@@ -79,6 +81,10 @@ function Dashboard() {
         });
     }
 
+    const handleOnClickSeePurchaseHistory = (stockName: string) => {
+        navigate(`/stocksBoughtHistory/${stockName}`)
+    }
+
     useEffect(() => {
         let currentUser: string = authService.getCurrentUser!;
         getUserPortfolioByEmail(currentUser);
@@ -125,7 +131,10 @@ function Dashboard() {
                                     <td className="p-5"><span className="font-bold">{element.stockName}</span></td>
                                     <td className="p-5">{element.stockQuantity}</td>
                                     <td className="p-5">${element.stockPrice}</td>
-                                    <td><button onClick={async () => handleOnClickSellStock(element)} className="btn-primary" type="button">Sell Stocks</button></td>
+                                    <td><div className="flex flex-row justify-evenly">
+                                        <button onClick={async () => handleOnClickSellStock(element)} className="btn-primary" type="button"><FontAwesomeIcon icon={faHandHoldingDollar} /> Sell Stocks</button>
+                                        <button onClick={async () => handleOnClickSeePurchaseHistory(element.stockName)} className="btn-primary w-56" type="button"><FontAwesomeIcon icon={faFolderOpen} /> See Purchase History</button>
+                                    </div></td>
                                 </tr>
                             ))
                         }
