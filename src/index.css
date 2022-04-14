@@ -81,4 +81,8 @@ code {
   .stock-card {
     @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-gray-200 via-white to-gray-200;
   }
+
+  .stock-card-gold {
+    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-amber-300 via-white to-amber-300;
+  }
 }

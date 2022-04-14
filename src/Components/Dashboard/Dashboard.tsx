@@ -1,6 +1,7 @@
 import { faFolderOpen, faGaugeHigh, faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -19,8 +20,17 @@ interface UserProfit {
     money: number
 }
 
+interface StockSold {
+    email: string,
+    stockName: string,
+    quantityBought: number,
+    transactionDate: string,
+    transactionTotal: number
+}
+
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
+const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -60,6 +70,16 @@ function Dashboard() {
                     await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${currentUser}/${userPortfolio.stockName}`, userPortfolio);
                     await axios.put(`${USER_PROFIT_URL}/${currentUser}`, userProfit);
 
+                    let stockSold: StockSold = {
+                        email: currentUser,
+                        stockName: userPortfolio.stockName,
+                        quantityBought: result.value,
+                        transactionDate: moment(new Date()).format('YYYY-MM-DD'),
+                        transactionTotal: result.value * userPortfolio.stockPrice
+                    }
+
+                    await axios.post(`${STOCK_SOLD_URL}`, stockSold);
+
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -83,6 +103,10 @@ function Dashboard() {
 
     const handleOnClickSeePurchaseHistory = (stockName: string) => {
         navigate(`/stocksBoughtHistory/${stockName}`)
+    }
+
+    const handleOnClickSeeSoldHistory = (stockName: string) => {
+        navigate(`/stocksSoldHistory/${stockName}`)
     }
 
     useEffect(() => {
@@ -134,6 +158,7 @@ function Dashboard() {
                                     <td><div className="flex flex-row justify-evenly">
                                         <button onClick={async () => handleOnClickSellStock(element)} className="btn-primary" type="button"><FontAwesomeIcon icon={faHandHoldingDollar} /> Sell Stocks</button>
                                         <button onClick={async () => handleOnClickSeePurchaseHistory(element.stockName)} className="btn-primary w-56" type="button"><FontAwesomeIcon icon={faFolderOpen} /> See Purchase History</button>
+                                        <button onClick={async () => handleOnClickSeeSoldHistory(element.stockName)} className="btn-primary w-56" type="button"><FontAwesomeIcon icon={faFolderOpen} /> See Sold History</button>
                                     </div></td>
                                 </tr>
                             ))

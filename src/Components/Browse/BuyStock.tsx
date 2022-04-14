@@ -1,8 +1,9 @@
-import { faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import moment from "moment";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 import StockCardBig from "../Cards/StockCardBig";
@@ -45,6 +46,7 @@ const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 
 function BuyStock() {
     const params = useParams();
+    const navigate = useNavigate();
     const [quantity, setQuantity] = useState<number>(0);
     const [stock, setStock] = useState<Stock>();
     const [userProfit, setUserProfit] = useState<UserProfit>();
@@ -104,7 +106,7 @@ function BuyStock() {
                                     email: currentUser,
                                     stockName: stock?.stockName!,
                                     quantityBought: quantity,
-                                    transactionDate: new Date().toISOString().split('T')[0],
+                                    transactionDate: moment(new Date()).format('YYYY-MM-DD'),
                                     transactionTotal: stock.stockPrice * quantity
                                 }
 
@@ -138,7 +140,7 @@ function BuyStock() {
                                     email: currentUser,
                                     stockName: stock?.stockName,
                                     quantityBought: quantity,
-                                    transactionDate: new Date().toISOString().split('T')[0],
+                                    transactionDate: moment(new Date()).format('YYYY-MM-DD'),
                                     transactionTotal: stock.stockPrice * quantity
                                 }
 
@@ -197,6 +199,10 @@ function BuyStock() {
         });
     }
 
+    const handleClickViewInfo = () => {
+        navigate(`/stockDetailedInfo/${params.stockName}`);
+    }
+
     useEffect(() => {
         let currentUser: string = authService.getCurrentUser!;
         getStockByStockName(params.stockName!);
@@ -208,6 +214,9 @@ function BuyStock() {
             <div className="container mx-auto">
                 <h1 className="header mt-10">Buy Stock <FontAwesomeIcon icon={faArrowTrendUp} /></h1>
                 <hr />
+                <div className="flex flex-row justify-end">
+                    <button onClick={() => handleClickViewInfo()} type="button" className="btn-primary w-56"><FontAwesomeIcon icon={faFileLines} /> View Detailed Info</button>
+                </div>
             </div>
 
             <div className="mt-20">

@@ -1,10 +1,11 @@
-import { faCircleInfo, faCoins, faCompass, faFileLines, faFireAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCoins, faCompass, faFileLines, faFireAlt, faList, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import StockCard from "../Cards/StockCard";
 import { motion } from 'framer-motion';
 import { useNavigate } from "react-router-dom";
+import StockCardGold from "../Cards/StockCardGold";
 
 interface Stock {
     stockName: string,
@@ -16,13 +17,24 @@ interface Stock {
     stockOwner: string
 }
 
+interface StockBought {
+    email: string,
+    stockName: string,
+    quantityBought: number
+    transactionDate: string,
+    transactionTotal: number
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
+const STOCK_BOUGHT_URL = `${process.env.REACT_APP_API_URL}/StockBoughts`;
 
 function Browse() {
     const [searchStock, setSearchStock] = useState<string>();
     const [stocks, setStocks] = useState<Stock[]>();
     const [selectedStock, setSelectedStock] = useState<Stock>();
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [lastStocks, setLastStocks] = useState<Stock[]>();
+    const [trendingStocks, setTrendingStocks] = useState<Stock[]>();
     const navigate = useNavigate();
 
     const variants = {
@@ -52,6 +64,39 @@ function Browse() {
     const handleClickViewInfo = (stockName: string) => {
         navigate(`/stockDetailedInfo/${stockName}`);
     }
+
+    const getStocksLastTwenty = async () => {
+        await axios.get(`${STOCK_URL}/GetStocksLastTwenty`).then(response => {
+            setLastStocks(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    const getTrendingStocks = async () => {
+        const stockNames = await axios.get(`${STOCK_BOUGHT_URL}/GetFrequentlyBoughtStocks`);
+        let stocks: Stock[] = [];
+        for (let i = 0; i < stockNames.data.length; i++) {
+            let stockName: string = stockNames.data[i].stockName;
+            const stock = await axios.get(`${STOCK_URL}/${stockName}`);
+            stocks.push(stock.data);
+        }
+
+        setTrendingStocks(stocks);
+    }
+
+    useEffect(() => {
+        // Some synchronous code.
+
+        (async () => {
+            await getStocksLastTwenty();
+            await getTrendingStocks();
+        })();
+
+        return () => {
+            // Component unmount code.
+        };
+    }, []);
 
     return (
         <div>
@@ -90,8 +135,63 @@ function Browse() {
             </div>
 
             <div className="container mx-auto">
+                <h2 className="header mt-10">Last Stocks <FontAwesomeIcon icon={faList} /></h2>
+                <hr />
+            </div>
+
+            <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10">
+                {
+                    lastStocks?.map((element: Stock, index: number) => (
+                        <motion.div key={index}
+                            whileHover={{
+                                scale: 1.15,
+                                transition: {
+                                    type: "spring"
+                                }
+                            }}
+                            initial={{
+                                opacity: 0
+                            }}
+                            animate={{
+                                opacity: 1
+                            }}
+                            className='text-center'
+                            onClick={() => handleOpenModal(element)}
+                        >
+                            <StockCard stock={element} />
+                        </motion.div>
+                    ))
+                }
+            </div>
+
+            <div className="container mx-auto">
                 <h2 className="header mt-10">Trending <FontAwesomeIcon icon={faFireAlt} /></h2>
                 <hr />
+            </div>
+
+            <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10 justify-center">
+                {
+                    trendingStocks?.map((element: Stock, index: number) => (
+                    <motion.div key={index}
+                        whileHover={{
+                            scale: 1.15,
+                            transition: {
+                                type: "spring"
+                            }
+                        }}
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1
+                        }}
+                        className='text-center'
+                        onClick={() => handleOpenModal(element)}
+                    >
+                        <StockCardGold stock={element} />
+                    </motion.div>
+                ))
+                }
             </div>
 
 
