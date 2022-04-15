@@ -1,4 +1,5 @@
 import moment from "moment";
+import { motion } from 'framer-motion';
 
 interface Stock {
     stockName: string,
@@ -12,7 +13,18 @@ interface Stock {
 
 function StockCardGold({ stock }: any) {
     return (
-        <div className="stock-card-gold cursor-pointer">
+        <motion.div
+            animate={{
+                translateY: [0, 50, -50, 0, 0],
+            }}
+            transition={{
+                duration: 7,
+                ease: 'easeInOut',
+                delay: 0.5,
+                repeat: Infinity
+            }}
+
+            className="stock-card-gold cursor-pointer">
             <div className="mt-1 text-right pr-2">
                 <label className="text-xs">Added on: {moment(stock.dateAdded).format('MM/DD/YYYY')}</label>
             </div>
@@ -53,7 +65,7 @@ function StockCardGold({ stock }: any) {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

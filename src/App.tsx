@@ -14,6 +14,9 @@ import Settings from './Components/Settings/Settings';
 import StockDetailedInfo from './Components/SocksDetailedInfo/StockDetailedInfo';
 import StocksBought from './Components/StocksBought/StocksBought';
 import StocksSold from './Components/StocksSold/StocksSold';
+import Logout from './Components/Login/Logout';
+import ManageWallet from './Components/Manage/ManageWallet';
+import UserProfile from './Components/UserProfile/UserProfile';
 
 function App() {
   const location = useLocation();
@@ -24,6 +27,7 @@ function App() {
       <Routes location={location}>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/logout' element={<Logout />} />
         <Route path='/signUp' element={<SignUp />} />
         <Route path='/browse' element={<RequireAuth redirectTo='/login'><Browse /></RequireAuth>} />
         <Route path='/buyStock/:stockName' element={<RequireAuth redirectTo='/login'><BuyStock /></RequireAuth>} />
@@ -33,9 +37,11 @@ function App() {
         <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
         <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
         <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
+        <Route path='/settings/manageWallet' element={<RequireAuth redirectTo='/login'><ManageWallet /></RequireAuth>} />
         <Route path='/stocksBoughtHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksBought /></RequireAuth>} />
         <Route path='/stocksSoldHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksSold /></RequireAuth>} />
         <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
+        <Route path='/userProfile/:email' element={<RequireAuth redirectTo='/login'><UserProfile /></RequireAuth>} />
       </Routes>
     </div>
   );

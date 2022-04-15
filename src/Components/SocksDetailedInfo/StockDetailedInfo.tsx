@@ -1,11 +1,11 @@
-import { faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCoins } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { Chart, registerables } from "chart.js";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StockCardBig from "../Cards/StockCardBig";
 
 interface Stock {
@@ -30,6 +30,7 @@ const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 
 function StockDetailedInfo() {
     const params = useParams();
+    const navigate = useNavigate();
     const [stockHistory, setStockHistory] = useState<StockHistory[]>();
     const [dataChart, setDataChart] = useState<any>();
     const [optionsChart, setOptionsChart] = useState<any>();
@@ -92,19 +93,19 @@ function StockDetailedInfo() {
                 y: {
                     display: true,
                     title: {
-                      display: true,
-                      text: 'Price',
-                      color: '#191',
-                      font: {
-                        family: 'Arial',
-                        size: 20,
-                        style: 'normal',
-                        lineHeight: 1.2
-                      },
-                      padding: {top: 30, left: 0, right: 0, bottom: 0}
+                        display: true,
+                        text: 'Price',
+                        color: '#191',
+                        font: {
+                            family: 'Arial',
+                            size: 20,
+                            style: 'normal',
+                            lineHeight: 1.2
+                        },
+                        padding: { top: 30, left: 0, right: 0, bottom: 0 }
                     }
-                  }
-            
+                }
+
             }
         }
 
@@ -129,6 +130,10 @@ function StockDetailedInfo() {
         });
     }
 
+    const handleOnClickBuyStock = () => {
+        navigate(`/buyStock/${params.stockName}`);
+    }
+
     useEffect(() => {
         const stockName: string = params.stockName!;
         //getStockHistoryByStockName(stockName);
@@ -141,6 +146,10 @@ function StockDetailedInfo() {
             <div className="container mx-auto">
                 <h1 className="header mt-10">Stock Detailed Information <FontAwesomeIcon icon={faArrowTrendUp} /></h1>
                 <hr />
+                <div className="flex flex-row justify-end">
+                    <button onClick={() => handleOnClickBuyStock()} type="button" className="btn-primary w-40"><FontAwesomeIcon icon={faCoins} /> Go to Buy Page</button>
+                </div>
+
             </div>
 
             <div className="mt-20">

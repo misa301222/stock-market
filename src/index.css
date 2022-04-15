@@ -83,6 +83,6 @@ code {
   }
 
   .stock-card-gold {
-    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-amber-300 via-white to-amber-300;
+    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-amber-400 via-amber-200 to-amber-600;
   }
 }

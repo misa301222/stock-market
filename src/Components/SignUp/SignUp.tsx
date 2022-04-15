@@ -1,5 +1,6 @@
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -10,6 +11,13 @@ interface User {
     email: string,
     password: string
 }
+
+interface UserProfit {
+    email: string,
+    money: number
+}
+
+const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 
 function SignUp() {
     const [fullName, setFullName] = useState<string>();
@@ -31,9 +39,14 @@ function SignUp() {
 
     const handleOnSubmitSignUpForm = async (event: SyntheticEvent) => {
         event.preventDefault();
-        await authService.registerUser(fullName!, email!, password!).then(response => {
+        await authService.registerUser(fullName!, email!, password!).then(async (response) => {
             switch (response.data.responseCode) {
                 case 1:
+                    let newUserProfit: UserProfit = {
+                        email: email!,
+                        money: 0
+                    }
+                    await axios.post(`${USER_PROFIT_URL}`, newUserProfit);
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
