@@ -55,7 +55,7 @@ code {
   }
 
   .card {
-    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto bg-gray-50;
+    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto bg-gray-50 rounded-md;
   }
 
   .btn-primary {

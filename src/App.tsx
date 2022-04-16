@@ -17,6 +17,8 @@ import StocksSold from './Components/StocksSold/StocksSold';
 import Logout from './Components/Login/Logout';
 import ManageWallet from './Components/Manage/ManageWallet';
 import UserProfile from './Components/UserProfile/UserProfile';
+import EditProfileInfo from './Components/UserProfile/EditProfileInfo';
+import SearchUsers from './Components/UserProfile/SearchUsers';
 
 function App() {
   const location = useLocation();
@@ -30,6 +32,7 @@ function App() {
         <Route path='/logout' element={<Logout />} />
         <Route path='/signUp' element={<SignUp />} />
         <Route path='/browse' element={<RequireAuth redirectTo='/login'><Browse /></RequireAuth>} />
+        <Route path='/searchUsers' element={<RequireAuth redirectTo='/login'><SearchUsers /></RequireAuth>} />
         <Route path='/buyStock/:stockName' element={<RequireAuth redirectTo='/login'><BuyStock /></RequireAuth>} />
         <Route path='/dashboard' element={<RequireAuth redirectTo='/login'><Dashboard /></RequireAuth>} />
         <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
@@ -42,6 +45,7 @@ function App() {
         <Route path='/stocksSoldHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksSold /></RequireAuth>} />
         <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
         <Route path='/userProfile/:email' element={<RequireAuth redirectTo='/login'><UserProfile /></RequireAuth>} />
+        <Route path='/settings/editProfileInfo/' element={<RequireAuth redirectTo='/login'><EditProfileInfo /></RequireAuth>} />
       </Routes>
     </div>
   );

@@ -1,4 +1,4 @@
-import { faChartLine, faCompass, faGaugeHigh, faGears, faHome, faHouseChimneyWindow, faMoneyBillTrendUp, faPersonWalkingArrowRight, faRightToBracket, faUserCheck } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCompass, faGaugeHigh, faGears, faHome, faHouseChimneyWindow, faMoneyBillTrendUp, faPersonWalkingArrowRight, faRightToBracket, faUserCheck, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -26,13 +26,21 @@ function Navbar() {
                     <div className="p-1 w-fit m-auto">
                         <Link to={'/'} className="navbar-link"><h5><FontAwesomeIcon icon={faHouseChimneyWindow} /> Home</h5></Link>
 
-                        <Link to={'/dashboard'} className="navbar-link"><h5><FontAwesomeIcon icon={faGaugeHigh} /> Dashboard</h5></Link>
+                        {
+                            isLoggedIn ?
+                                <div className="navbar-link">
+                                    <Link to={'/dashboard'} className="navbar-link"><h5><FontAwesomeIcon icon={faGaugeHigh} /> Dashboard</h5></Link>
 
-                        <Link to={'/manageStocks'} className="navbar-link"><h5><FontAwesomeIcon icon={faChartLine} /> Manage Stocks</h5></Link>
+                                    <Link to={'/manageStocks'} className="navbar-link"><h5><FontAwesomeIcon icon={faChartLine} /> Manage Stocks</h5></Link>
 
-                        <Link to={'/browse'} className="navbar-link"><h5><FontAwesomeIcon icon={faCompass} /> Browse</h5></Link>
+                                    <Link to={'/browse'} className="navbar-link"><h5><FontAwesomeIcon icon={faCompass} /> Browse</h5></Link>
 
-                        <Link to={'/settings'} className="navbar-link"><h5><FontAwesomeIcon icon={faGears} /> Settings</h5></Link>
+                                    <Link to={'/searchUsers'} className="navbar-link"><h5><FontAwesomeIcon icon={faUsers} /> Users</h5></Link>
+
+                                    <Link to={'/settings'} className="navbar-link"><h5><FontAwesomeIcon icon={faGears} /> Settings</h5></Link>                                    
+                                </div>
+                                : null
+                        }
 
                         {
                             !isLoggedIn ?
