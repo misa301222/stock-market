@@ -28,14 +28,41 @@ interface StockSold {
     transactionTotal: number
 }
 
+interface UserProfile {
+    email: string,
+    profilePictureURL: string,
+    coverPictureURL: string,
+    aboutMeHeader: string,
+    aboutMeDescription: string,
+    phoneNumber: string,
+    ocupation: string,
+    education: string[],
+    imagesURL: string[],
+    fullName?: string
+}
+
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
+const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
+const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 
 function Dashboard() {
     const navigate = useNavigate();
     const [userPortfolio, setUserPortfolio] = useState<UserPortfolio[]>();
     const [userProfit, setUserProfit] = useState<UserProfit>();
+    const [userProfile, setUserProfile] = useState<UserProfile>();
+
+    const getUserProfileByEmail = async (email: string) => {
+        const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${email}`);
+
+        await axios.get(`${USER_PROFILE_URL}/${email}`).then(response => {
+            response.data.fullName = responseUser.data.dataSet.fullName;
+            setUserProfile(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
     const getUserPortfolioByEmail = async (email: string) => {
         await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmail/${email}`).then(response => {
@@ -47,7 +74,6 @@ function Dashboard() {
 
     const getUserProfitByEmail = async (email: string) => {
         await axios.get(`${USER_PROFIT_URL}/${email}`).then(response => {
-            console.log(response);
             setUserProfit(response.data);
         }).catch(err => {
             console.log(err);
@@ -113,6 +139,7 @@ function Dashboard() {
         let currentUser: string = authService.getCurrentUser!;
         getUserPortfolioByEmail(currentUser);
         getUserProfitByEmail(currentUser);
+        getUserProfileByEmail(currentUser);
     }, []);
 
     return (
@@ -123,7 +150,7 @@ function Dashboard() {
             </div>
 
             <div className="container mx-auto">
-                <UserProfitCard userProfit={userProfit} />
+                <UserProfitCard userProfit={userProfit} userProfile={userProfile} />
             </div>
 
             <div className="mt-10">

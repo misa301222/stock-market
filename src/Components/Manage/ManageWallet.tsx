@@ -11,11 +11,39 @@ interface UserProfit {
     money: number
 }
 
+interface UserProfile {
+    email: string,
+    profilePictureURL: string,
+    coverPictureURL: string,
+    aboutMeHeader: string,
+    aboutMeDescription: string,
+    phoneNumber: string,
+    ocupation: string,
+    education: string[],
+    imagesURL: string[],
+    fullName?: string
+}
+
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
+const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
+const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 
 function ManageWallet() {
     const [userProfit, setUserProfit] = useState<UserProfit>();
     const [money, setMoney] = useState<number>(0);
+    const [userProfile, setUserProfile] = useState<UserProfile>();
+
+    const getUserProfileByEmail = async (email: string) => {
+        const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${email}`);
+
+        await axios.get(`${USER_PROFILE_URL}/${email}`).then(response => {
+            response.data.fullName = responseUser.data.dataSet.fullName;
+            setUserProfile(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
 
     const getUserProfitByEmail = async (email: string) => {
         await axios.get(`${USER_PROFIT_URL}/${email}`).then(response => {
@@ -66,6 +94,7 @@ function ManageWallet() {
     useEffect(() => {
         let currentUser: string = authService.getCurrentUser!;
         getUserProfitByEmail(currentUser);
+        getUserProfileByEmail(currentUser);
     }, []);
 
     return (
@@ -76,7 +105,7 @@ function ManageWallet() {
             </div>
 
             <div className="">
-                <UserProfitCard userProfit={userProfit} />
+                <UserProfitCard userProfit={userProfit} userProfile={userProfile} />
             </div>
 
             <div className="card mt-20 p-5">

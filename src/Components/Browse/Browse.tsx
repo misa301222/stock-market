@@ -105,7 +105,7 @@ function Browse() {
                 <hr />
                 <form onSubmit={handleOnSubmitSearchForm} className="flex flex-row w-1/4 gap-5 ml-auto mt-2">
                     <button disabled={!searchStock} type="submit" className="btn-primary"><FontAwesomeIcon icon={faSearch} /> Search</button>
-                    <input onChange={(e) => setSearchStock(e.target.value)} className="form-control" type={'text'} maxLength={25} />
+                    <input onChange={(e) => setSearchStock(e.target.value)} className="form-control" type={'text'} maxLength={25} placeholder={'Type the name of a stock...'} />
                 </form>
             </div>
 

@@ -39,10 +39,25 @@ interface UserProfit {
     money: number
 }
 
+interface UserProfile {
+    email: string,
+    profilePictureURL: string,
+    coverPictureURL: string,
+    aboutMeHeader: string,
+    aboutMeDescription: string,
+    phoneNumber: string,
+    ocupation: string,
+    education: string[],
+    imagesURL: string[],
+    fullName?: string
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 const STOCK_BOUGHT_URL = `${process.env.REACT_APP_API_URL}/StockBoughts`;
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
+const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
+const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 
 function BuyStock() {
     const params = useParams();
@@ -50,6 +65,18 @@ function BuyStock() {
     const [quantity, setQuantity] = useState<number>(0);
     const [stock, setStock] = useState<Stock>();
     const [userProfit, setUserProfit] = useState<UserProfit>();
+    const [userProfile, setUserProfile] = useState<UserProfile>();
+
+    const getUserProfileByEmail = async (email: string) => {
+        const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${email}`);
+
+        await axios.get(`${USER_PROFILE_URL}/${email}`).then(response => {
+            response.data.fullName = responseUser.data.dataSet.fullName;
+            setUserProfile(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
     const getStockByStockName = async (stockName: string) => {
         await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
@@ -148,7 +175,7 @@ function BuyStock() {
                                     email: currentUser,
                                     stockName: stock.stockName,
                                     stockQuantity: quantity,
-                                    stockPrice: stock.stockPrice,                                    
+                                    stockPrice: stock.stockPrice,
                                 }
 
                                 await axios.post(`${STOCK_BOUGHT_URL}`, stockBought).then(async (response) => {
@@ -207,6 +234,7 @@ function BuyStock() {
         let currentUser: string = authService.getCurrentUser!;
         getStockByStockName(params.stockName!);
         getUserProfitByEmail(currentUser);
+        getUserProfileByEmail(currentUser);
     }, []);
 
     return (
@@ -223,30 +251,39 @@ function BuyStock() {
                 <StockCardBig stock={stock} />
             </div>
 
-            <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
-                <div className="w-[20%] p-3">
-                    <h3 className="font-bold mb-5">Buy Stocks</h3>
-                    <form onSubmit={handleOnSubmitBuyStock} className="">
-                        <div className="mb-5">
-                            <label className="font-bold">Quantity</label>
-                            <input onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={99999} className="form-control text-center" />
+            {
+                stock ?
+                    stock.stockPrice > 0 ?
+                        <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
+                            <div className="w-[20%] p-3">
+                                <h3 className="font-bold mb-5">Buy Stocks</h3>
+                                <form onSubmit={handleOnSubmitBuyStock} className="">
+                                    <div className="mb-5">
+                                        <label className="font-bold">Quantity</label>
+                                        <input onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={99999} className="form-control text-center" />
+                                    </div>
+                                    <div>
+                                        <button disabled={quantity < 1} type='submit' className="btn-primary">Buy</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="w-[80%]">
+                                <div>
+                                    <h2 className="font-bold">Calculations</h2>
+                                    <hr />
+                                    <h3 className="font-bold mt-2"><u>${stock?.stockPrice}</u> x <u>{quantity}</u> Stocks to buy = <u>${(stock?.stockPrice ? stock.stockPrice : 0) * quantity}</u> Total</h3>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <button disabled={quantity < 1} type='submit' className="btn-primary">Buy</button>
+                        :
+                        <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
+                            <h1 className="font-bold text-red-700">This Stock's Value is 0! Or it probably went bakrupt. You cannot buy anymore shares.</h1>
                         </div>
-                    </form>
-                </div>
-                <div className="w-[80%]">
-                    <div>
-                        <h2 className="font-bold">Calculations</h2>
-                        <hr />
-                        <h3 className="font-bold mt-2"><u>${stock?.stockPrice}</u> x <u>{quantity}</u> Stocks to buy = <u>${(stock?.stockPrice ? stock.stockPrice : 0) * quantity}</u> Total</h3>
-                    </div>
-                </div>
-            </div>
+                    : null
+            }
 
             <div>
-                <UserProfitCard userProfit={userProfit} />
+                <UserProfitCard userProfit={userProfit} userProfile={userProfile} />
             </div>
         </div>
     )

@@ -1,6 +1,7 @@
 import { faBusinessTime } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import moment from "moment";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -86,9 +87,9 @@ function AddNewStock() {
         let currentUser: string = authService.getCurrentUser!;
         if (currentUser) {
             let newStock: Stock = stock;
-            newStock.dateAdded = new Date().toISOString().split('T')[0];
+            newStock.dateAdded = moment(new Date()).format('YYYY-MM-DD');
             newStock.stockOwner = currentUser;
-            await saveNewStock(newStock);
+            await saveNewStock(newStock);            
 
             let newStockHistory: StockHistory = {
                 stockId: 0,

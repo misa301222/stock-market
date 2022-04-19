@@ -1,4 +1,4 @@
-import { faCogs, faDatabase, faUserGear, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCogs, faDatabase, faUserGear, faWallet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -19,6 +19,10 @@ function Settings() {
 
     const handleOnClickEditProfileInfo = () => {
         navigate('editProfileInfo');
+    }
+
+    const handleOnClickManageStocks = () => {
+        navigate('manageStocks');
     }
 
     useEffect(() => {
@@ -71,6 +75,24 @@ function Settings() {
 
                     <div className="border border-gray-300 rounded-md mt-5">
                         <h5> Manage Wallet </h5>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    whileHover={{
+                        scale: 1.1
+                    }}
+                    transition={{
+                        type: "spring"
+                    }}
+                    className="card w-[15rem] p-5 cursor-pointer"
+                    onClick={() => handleOnClickManageStocks()}>
+                    <div className="p-2">
+                        <FontAwesomeIcon className="text-[10rem]" icon={faChartLine} />
+                    </div>
+
+                    <div className="border border-gray-300 rounded-md mt-5">
+                        <h5> Manage Stocks </h5>
                     </div>
                 </motion.div>
 

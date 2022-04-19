@@ -122,7 +122,15 @@ function ManageStockHistory() {
         event.preventDefault();
 
         await axios.put(`${STOCK_HISTORY_URL}/${selectedStockHistory.stockId}`, selectedStockHistory).then(response => {
-            console.log(response);
+            //console.log(response);
+        }).catch(err => {
+            console.log(err);
+        });
+        const responseStock = await axios.get(`${STOCK_URL}/${selectedStockHistory.stockName}`);
+        let editedStock: Stock = responseStock.data;
+        editedStock.stockPrice = selectedStockHistory.stockPrice;
+        console.log(editedStock);
+        await axios.put(`${STOCK_URL}/${editedStock.stockName}`, editedStock).then(response => {
 
         }).catch(err => {
             console.log(err);
@@ -166,7 +174,7 @@ function ManageStockHistory() {
                     }).catch(err => {
                         console.log(err);
                     });
-                    
+
                     const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
                     for (let i = 0; i < userPortfolios.data.length; i++) {
                         let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];

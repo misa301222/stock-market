@@ -179,6 +179,16 @@ function EditProfileInfo() {
 
                     <div className="flex flex-row mb-10">
                         <div className="w-1/4">
+                            <label>Ocupation</label>
+                        </div>
+
+                        <div className="w-3/4">
+                            <input onChange={handleOnChangeOcupation} value={userProfile?.ocupation} type={'text'} className='form-control' />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-row mb-10">
+                        <div className="w-1/4">
                             <label>About Me Header</label>
                         </div>
 
