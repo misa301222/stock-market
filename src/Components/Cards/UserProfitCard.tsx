@@ -23,7 +23,7 @@ function UserProfitCard({ userProfit, userProfile }: any) {
             <div className="flex flex-row">
                 <div className="w-1/3"
                     style={{
-                        backgroundImage: `url(${userProfile?.profilePictureURL})`,
+                        backgroundImage: `${userProfile?.profilePictureURL ? `url(${userProfile?.profilePictureURL})` : `url(/images/NotFound.png)`}`,
                         height: '10rem',
                         width: '10rem',
                         backgroundSize: 'cover',

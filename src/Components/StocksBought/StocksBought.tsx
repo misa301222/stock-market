@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import authService from "../../Services/auth.service";
+import StockCardBig from "../Cards/StockCardBig";
 
 interface StockBought {
     email: string,
@@ -13,16 +14,46 @@ interface StockBought {
     transactionTotal: number
 }
 
+interface Stock {
+    stockName: string,
+    stockDescription: string,
+    stockPrice: number,
+    stockQuantity: number,
+    stockLogoURL: string,
+    dateAdded: Date,
+    stockOwner: string
+}
+
 const STOCK_BOUGHT_URL = `${process.env.REACT_APP_API_URL}/StockBoughts`;
+const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 
 function StocksBought() {
     const params = useParams();
     const [stockBought, setStockBought] = useState<StockBought[]>();
+    const [stock, setStock] = useState<Stock>();
+    const [totalTransactionTotal, setTotalTransactionTotal] = useState<number>();
 
     const getStockBoughtByEmailAndStockName = async (email: string, stockName: string) => {
+        let stockBoughtList: StockBought[] = [];
         await axios.get(`${STOCK_BOUGHT_URL}/GetStockBoughtByEmailAndStockName/${email}/${stockName}`).then(response => {
             console.log(response.data);
+            stockBoughtList = response.data;
             setStockBought(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+
+        let totalTransaction: number = 0;
+        for (let i = 0; i < stockBoughtList.length; i++) {
+            totalTransaction += stockBoughtList[i].transactionTotal;
+        }
+        setTotalTransactionTotal(totalTransaction);
+    }
+
+    const getStockByStockName = async (stockName: string) => {
+        await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
+            console.log(response);
+            setStock(response.data);
         }).catch(err => {
             console.log(err);
         });
@@ -33,13 +64,18 @@ function StocksBought() {
         let email: string = authService.getCurrentUser!;
 
         getStockBoughtByEmailAndStockName(email, stockName);
+        getStockByStockName(stockName);
     }, []);
 
     return (
         <div>
             <div className="container mx-auto">
-                <h1 className="header mt-10">Your Dashboard <FontAwesomeIcon icon={faFolderOpen} /></h1>
+                <h1 className="header mt-10">Stock Bougth <FontAwesomeIcon icon={faFolderOpen} /></h1>
                 <hr />
+            </div>
+
+            <div className="mt-20">
+                <StockCardBig stock={stock} />
             </div>
 
             <div className="mt-10">
@@ -84,6 +120,7 @@ function StocksBought() {
                     </tbody>
                 </table>
             </div>
+            <h2 className="font-bold mt-20">Total From Stocks Transaction: ${totalTransactionTotal?.toFixed(2)}</h2>
         </div>
     )
 }

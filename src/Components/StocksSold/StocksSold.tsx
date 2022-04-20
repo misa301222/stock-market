@@ -1,7 +1,10 @@
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import authService from "../../Services/auth.service";
+import StockCardBig from "../Cards/StockCardBig";
 
 interface StockSold {
     email: string,
@@ -11,15 +14,45 @@ interface StockSold {
     transactionTotal: number
 }
 
+interface Stock {
+    stockName: string,
+    stockDescription: string,
+    stockPrice: number,
+    stockQuantity: number,
+    stockLogoURL: string,
+    dateAdded: Date,
+    stockOwner: string
+}
+
 const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
+const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 
 function StocksSold() {
     const params = useParams();
     const [stockSold, setStockSold] = useState<StockSold[]>();
+    const [stock, setStock] = useState<Stock>();
+    const [totalTransactionTotal, setTotalTransactionTotal] = useState<number>();
 
     const getStockSoldByEmailAndStockName = async (email: string, stockName: string) => {
+        let stockBoughtList: StockSold[] = [];
         await axios.get(`${STOCK_SOLD_URL}/GetStockBoughtByEmailAndStockName/${email}/${stockName}`).then(response => {
+            stockBoughtList = response.data;
             setStockSold(response.data);
+        }).catch(err => {
+            console.log(err);
+        });
+
+        let totalTransaction: number = 0;
+        for (let i = 0; i < stockBoughtList.length; i++) {
+            totalTransaction += stockBoughtList[i].transactionTotal;
+        }
+        setTotalTransactionTotal(totalTransaction);
+    }
+
+    const getStockByStockName = async (stockName: string) => {
+        await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
+            console.log(response);
+            setStock(response.data);
         }).catch(err => {
             console.log(err);
         });
@@ -30,11 +63,22 @@ function StocksSold() {
         let email: string = authService.getCurrentUser!;
 
         getStockSoldByEmailAndStockName(email, stockName);
+        getStockByStockName(stockName);
     }, []);
 
     return (
         <div>
-<div className="mt-10">
+
+            <div className="container mx-auto">
+                <h1 className="header mt-10">Stock Sold <FontAwesomeIcon icon={faFolderOpen} /></h1>
+                <hr />
+            </div>
+
+            <div className="mt-20">
+                <StockCardBig stock={stock} />
+            </div>
+
+            <div className="mt-10">
                 <table className="border border-gray-300 w-5/6 mx-auto">
                     <thead>
                         <tr className="bg-gradient-to-r from-slate-700 via-slate-500 to-slate-700 text-white">
@@ -76,6 +120,7 @@ function StocksSold() {
                     </tbody>
                 </table>
             </div>
+            <h2 className="font-bold mt-20">Total From Stocks Transaction: ${totalTransactionTotal?.toFixed(2)}</h2>
         </div>
     )
 }
