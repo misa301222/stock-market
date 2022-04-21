@@ -32,7 +32,7 @@ function StockCard({ stock }: any) {
                     </div>
 
                     <div className="w-1/2 text-left">
-                        <label>${stock.stockPrice}</label>
+                        <label>${(stock.stockPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}</label>
                     </div>
                 </div>
 

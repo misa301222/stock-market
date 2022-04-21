@@ -2,7 +2,7 @@ import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import authService from "../../Services/auth.service";
 import StockCardBig from "../Cards/StockCardBig";
 
@@ -108,11 +108,11 @@ function StocksSold() {
                         {
                             stockSold?.map((element: StockSold, index: number) => (
                                 <tr key={index}>
-                                    <td className="p-5"><span className="font-bold">{element.stockName}</span></td>
+                                    <td className="p-5"><span className="font-bold text-blue-800 underline"><Link to={`/stockDetailedInfo/${element.stockName}`}>{element.stockName}</Link></span></td>
                                     <td className="p-5">{element.quantityBought}</td>
                                     <td className="p-5">{element.transactionDate.split('T')[0]}</td>
-                                    <td className="p-5">${(element.transactionTotal).toFixed(2)}</td>
-                                    <td className="p-5">${(element.transactionTotal / element.quantityBought).toFixed(2)}</td>
+                                    <td className="p-5 font-bold">${(element.transactionTotal).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                    <td className="p-5 font-bold">${(element.transactionTotal / element.quantityBought).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                 </tr>
                             ))
                         }
@@ -120,7 +120,7 @@ function StocksSold() {
                     </tbody>
                 </table>
             </div>
-            <h2 className="font-bold mt-20">Total From Stocks Transaction: ${totalTransactionTotal?.toFixed(2)}</h2>
+            <h2 className="font-bold mt-20">Total From Stocks Transaction(s): ${totalTransactionTotal?.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h2>
         </div>
     )
 }

@@ -16,7 +16,7 @@ function StockCardBig({ stock }: any) {
                     <h2><b>Stocks Left:</b> {stock?.stockQuantity}</h2>
                 </div>
                 <div className="mb-2">
-                    <h2><b>Current Price:</b> ${stock?.stockPrice}</h2>
+                    <h2><b>Current Price:</b> ${(stock?.stockPrice ? stock?.stockPrice.toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0)}</h2>
                 </div>
 
                 <div className="mb-2">

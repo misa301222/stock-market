@@ -271,7 +271,10 @@ function BuyStock() {
                                 <div>
                                     <h2 className="font-bold">Calculations</h2>
                                     <hr />
-                                    <h3 className="font-bold mt-2"><u>${stock?.stockPrice}</u> x <u>{quantity}</u> Stocks to buy = <u>${(stock?.stockPrice ? stock.stockPrice : 0) * quantity}</u> Total</h3>
+                                    <h3 className="font-bold mt-5 text-green-700"><u>${(stock?.stockPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}</u> x <u>{quantity}</u> <span className="text-black">Stocks to buy = </span>
+                                        <u>${((stock?.stockPrice ? stock.stockPrice : 0) * quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</u> Total</h3>
+
+                                    <h3 className="font-bold mt-10 text-blue-600">${((stock?.stockPrice ? stock.stockPrice : 0) * quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })} <span className="text-black">substracted from your account will leave a total of </span>${(userProfit?.money! - ((stock?.stockPrice ? stock.stockPrice : 0) * quantity)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</h3>
                                 </div>
                             </div>
                         </div>
