@@ -99,7 +99,7 @@ function Dashboard() {
 
     const handleOnClickSellStockModal = (userPortfolio: UserPortfolio) => {
         setIsSellStocksOpen(true);
-        setCurrentUserPortfolio(userPortfolio);
+        setCurrentUserPortfolio(userPortfolio);        
     }
 
     const handleOnClickSellStock = async () => {

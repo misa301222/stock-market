@@ -1,4 +1,4 @@
-import { faBriefcase, faLocation, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faBriefcase, faGraduationCap, faHeart, faImage, faLocation, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -113,6 +113,49 @@ function UserProfile() {
                     <p className="line-clamp-5 text-justify">{userProfile?.aboutMeDescription}</p>
                 </div>
             </div>
+
+            <div className="container mx-auto mt-20">
+                {
+                    userProfile?.education ?
+                        <div className="">
+                            <h2 className="font-bold card w-60 p-5"><FontAwesomeIcon icon={faGraduationCap} /> Education</h2>
+                            <ul className="mt-10 font-bold card p-5">
+                                {
+                                    userProfile.education?.map((element: string, index: number) => (
+                                        <li className="w-1/2 mx-auto text-left text-truncate" key={index}>
+                                            {
+                                                element
+                                            }
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                        : null
+                }
+            </div>
+
+            <div className="container mx-auto mt-20">
+                <div>
+                    <h2 className="font-bold card w-80 p-5"><FontAwesomeIcon icon={faImage} /> Images I <FontAwesomeIcon className="text-red-500" icon={faHeart} /></h2>
+
+                    <div className="w-[75rem] h-[50rem] border border-gray-500 shadow-sm shadow-black rounded-md mx-auto mt-20">
+                        {
+                            userProfile?.imagesURL.map((element: string, index: number) => (
+                                <motion.img drag
+                                    dragConstraints={{
+                                        top: -50,
+                                        left: -50,
+                                        right: 1000,
+                                        bottom: 550,
+                                    }}
+                                    key={index} src={element} className='h-[10rem] mx-auto cursor-pointer absolute rounded-md shadow-md shadow-black' />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }
