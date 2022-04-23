@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useNavigate, useParams } from "react-router-dom";
 import StockCardBig from "../Cards/StockCardBig";
+import { motion } from 'framer-motion';
 
 interface Stock {
     stockName: string,
@@ -71,7 +72,7 @@ function StockDetailedInfo() {
             plugins: {
                 title: {
                     display: true,
-                    text: (ctx: any) => 'Step ' + ctx.chart.data.datasets[0].stepped + ' Interpolation',
+                    text: (ctx: any) => 'Stock Information',
                 }
             },
             scales: {
@@ -152,22 +153,46 @@ function StockDetailedInfo() {
 
             </div>
 
-            <div className="mt-20">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 1,
+                }}
+                className="mt-20">
                 {
                     stock ?
                         <StockCardBig stock={stock} />
                         : null
                 }
-            </div>
+            </motion.div>
 
-            <div className="w-2/3 mx-auto mt-10">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                }}
+                animate={{
+                    opacity: 1,
+                }}
+                transition={{
+                    duration: 1,
+                }}
+                className="w-2/3 mx-auto mt-20">
                 {
                     dataChart ?
                         <Line data={dataChart} options={optionsChart} />
                         : null
                 }
 
-            </div>
+            </motion.div>
         </div>
     )
 }

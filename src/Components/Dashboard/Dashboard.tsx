@@ -99,7 +99,7 @@ function Dashboard() {
 
     const handleOnClickSellStockModal = (userPortfolio: UserPortfolio) => {
         setIsSellStocksOpen(true);
-        setCurrentUserPortfolio(userPortfolio);        
+        setCurrentUserPortfolio(userPortfolio);
     }
 
     const handleOnClickSellStock = async () => {
@@ -181,9 +181,23 @@ function Dashboard() {
                 <hr />
             </div>
 
-            <div className="container mx-auto">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 1,
+                }}
+                className="container mx-auto">
                 <UserProfitCard userProfit={userProfit} userProfile={userProfile} />
-            </div>
+            </motion.div>
 
             <div className="mt-10">
                 <table className="border border-gray-300 w-5/6 mx-auto">

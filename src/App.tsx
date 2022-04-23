@@ -19,34 +19,45 @@ import ManageWallet from './Components/Manage/ManageWallet';
 import UserProfile from './Components/UserProfile/UserProfile';
 import EditProfileInfo from './Components/UserProfile/EditProfileInfo';
 import SearchUsers from './Components/UserProfile/SearchUsers';
+import { useLayoutEffect } from 'react';
 
 function App() {
   const location = useLocation();
 
+  const Wrapper = ({ children }: any) => {
+    const location = useLocation();
+    useLayoutEffect(() => {
+      document.documentElement.scrollTo(0, 0);
+    }, [location.pathname]);
+    return children;
+  }
+
   return (
     <div className="App">
       <Navbar />
-      <Routes location={location}>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/logout' element={<Logout />} />
-        <Route path='/signUp' element={<SignUp />} />
-        <Route path='/browse' element={<RequireAuth redirectTo='/login'><Browse /></RequireAuth>} />
-        <Route path='/searchUsers' element={<RequireAuth redirectTo='/login'><SearchUsers /></RequireAuth>} />
-        <Route path='/buyStock/:stockName' element={<RequireAuth redirectTo='/login'><BuyStock /></RequireAuth>} />
-        <Route path='/dashboard' element={<RequireAuth redirectTo='/login'><Dashboard /></RequireAuth>} />
-        <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
-        <Route path='/newStock' element={<RequireAuth redirectTo='/login'><AddNewStock /></RequireAuth>} />
-        <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
-        <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
-        <Route path='/settings/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
-        <Route path='/settings/manageWallet' element={<RequireAuth redirectTo='/login'><ManageWallet /></RequireAuth>} />
-        <Route path='/stocksBoughtHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksBought /></RequireAuth>} />
-        <Route path='/stocksSoldHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksSold /></RequireAuth>} />
-        <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
-        <Route path='/userProfile/:email' element={<RequireAuth redirectTo='/login'><UserProfile /></RequireAuth>} />
-        <Route path='/settings/editProfileInfo/' element={<RequireAuth redirectTo='/login'><EditProfileInfo /></RequireAuth>} />
-      </Routes>
+      <Wrapper>
+        <Routes location={location}>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/logout' element={<Logout />} />
+          <Route path='/signUp' element={<SignUp />} />
+          <Route path='/browse' element={<RequireAuth redirectTo='/login'><Browse /></RequireAuth>} />
+          <Route path='/searchUsers' element={<RequireAuth redirectTo='/login'><SearchUsers /></RequireAuth>} />
+          <Route path='/buyStock/:stockName' element={<RequireAuth redirectTo='/login'><BuyStock /></RequireAuth>} />
+          <Route path='/dashboard' element={<RequireAuth redirectTo='/login'><Dashboard /></RequireAuth>} />
+          <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
+          <Route path='/newStock' element={<RequireAuth redirectTo='/login'><AddNewStock /></RequireAuth>} />
+          <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
+          <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
+          <Route path='/settings/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
+          <Route path='/settings/manageWallet' element={<RequireAuth redirectTo='/login'><ManageWallet /></RequireAuth>} />
+          <Route path='/stocksBoughtHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksBought /></RequireAuth>} />
+          <Route path='/stocksSoldHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksSold /></RequireAuth>} />
+          <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
+          <Route path='/userProfile/:email' element={<RequireAuth redirectTo='/login'><UserProfile /></RequireAuth>} />
+          <Route path='/settings/editProfileInfo/' element={<RequireAuth redirectTo='/login'><EditProfileInfo /></RequireAuth>} />
+        </Routes>
+      </Wrapper>
     </div>
   );
 }

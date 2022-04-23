@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import authService from "../../Services/auth.service";
 import StockCardBig from "../Cards/StockCardBig";
+import { motion } from 'framer-motion';
 
 interface StockSold {
     email: string,
@@ -74,9 +75,23 @@ function StocksSold() {
                 <hr />
             </div>
 
-            <div className="mt-20">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 1,
+                }}
+                className="mt-20">
                 <StockCardBig stock={stock} />
-            </div>
+            </motion.div>
 
             <div className="mt-10">
                 <table className="border border-gray-300 w-5/6 mx-auto">

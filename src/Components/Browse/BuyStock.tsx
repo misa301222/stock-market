@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 import StockCardBig from "../Cards/StockCardBig";
 import UserProfitCard from "../Cards/UserProfitCard";
+import { motion } from 'framer-motion';
 
 interface Stock {
     stockName: string,
@@ -247,14 +248,38 @@ function BuyStock() {
                 </div>
             </div>
 
-            <div className="mt-20">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 1,
+                }}
+                className="mt-20">
                 <StockCardBig stock={stock} />
-            </div>
+            </motion.div>
 
             {
                 stock ?
                     stock.stockPrice > 0 ?
-                        <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                            }}
+                            transition={{
+                                duration: 1,
+                            }}
+                            className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
                             <div className="w-[20%] p-3">
                                 <h3 className="font-bold mb-5">Buy Stocks</h3>
                                 <form onSubmit={handleOnSubmitBuyStock} className="">
@@ -277,7 +302,7 @@ function BuyStock() {
                                     <h3 className="font-bold mt-10 text-blue-600">${((stock?.stockPrice ? stock.stockPrice : 0) * quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })} <span className="text-black">substracted from your account will leave a total of </span>${(userProfit?.money! - ((stock?.stockPrice ? stock.stockPrice : 0) * quantity)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</h3>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                         :
                         <div className="flex flex-row mt-20 container mx-auto rounded-md shadow-black/50 shadow-md p-5">
                             <h1 className="font-bold text-red-700">This Stock's Value is 0! Or it probably went bakrupt. You cannot buy anymore shares.</h1>
@@ -285,9 +310,23 @@ function BuyStock() {
                     : null
             }
 
-            <div>
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 1,
+                }}
+            >
                 <UserProfitCard userProfit={userProfit} userProfile={userProfile} />
-            </div>
+            </motion.div>
         </div>
     )
 }
