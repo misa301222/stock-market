@@ -40,7 +40,7 @@ function UserProfitCard({ userProfit, userProfile }: any) {
                         </div>
 
                         <div className="">
-                            <h3 className="font-bold">${userProfit?.money}</h3>
+                            <h3 className="font-bold">${userProfit?.money.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h3>
                             <small>Total Money</small>
                         </div>
                     </div>

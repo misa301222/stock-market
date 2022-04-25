@@ -99,8 +99,6 @@ function SearchUsers() {
                                 </div>
 
                                 <div className="-mt-44">
-                                    <h3 className="font-bold text-red-300 truncate">{element.fullName}</h3>
-
                                     <div style={{
                                         backgroundImage: `${element.profilePictureURL ? `url(${element.profilePictureURL})` : `url(/images/NotFound.png)`}`,
                                         width: '10rem',
@@ -113,8 +111,14 @@ function SearchUsers() {
                                     }}>
                                     </div>
 
-                                    <div className="mt-4">
-                                        <label className="truncate">{element.aboutMeHeader}</label>
+                                    <h3 className="font-bold text-black truncate mt-4">{element.fullName}</h3>
+
+                                    <div className="mt-4 p-1 truncate">
+                                        <label className="underline">{element.aboutMeHeader}</label>
+                                    </div>
+
+                                    <div className="mt-2 line-clamp-2 pr-2 pl-2">
+                                        <label className="text-black/80">{element.aboutMeDescription}</label>
                                     </div>
                                 </div>
                             </div>

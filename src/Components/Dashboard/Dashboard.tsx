@@ -13,7 +13,8 @@ interface UserPortfolio {
     email: string,
     stockName: string,
     stockQuantity: number,
-    stockPrice: number
+    stockPrice: number,
+    stockPriceYesterday?: number
 }
 
 interface UserProfit {
@@ -42,11 +43,19 @@ interface UserProfile {
     fullName?: string
 }
 
+interface StockHistory {
+    stockId: number,
+    stockName: string,
+    stockDate: any,
+    stockPrice: number
+}
+
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
+const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -63,6 +72,14 @@ function Dashboard() {
     const variants = {
         open: { opacity: 1, display: 'block' },
         closed: { opacity: 0, display: 'none' }
+    }
+
+    const getStockHistoryByStockNameAndDate = async (stockName: string, stockDate: Date) => {
+        await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stockName}/${stockDate}`).then(response => {
+
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     const getUserProfileByEmail = async (email: string) => {
@@ -82,11 +99,13 @@ function Dashboard() {
     }
 
     const getUserPortfolioByEmail = async (email: string) => {
-        await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmail/${email}`).then(response => {
-            setUserPortfolio(response.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        const responseUserPortfolio = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmail/${email}`);
+        for (let i = 0; i < responseUserPortfolio.data.length; i++) {
+            const responseDateYesterday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseUserPortfolio.data[i].stockName}/${yesterdayDate}`);
+            responseUserPortfolio.data[i].stockPriceYesterday = responseDateYesterday.data.stockPrice;
+        }
+        setUserPortfolio(responseUserPortfolio.data);
     }
 
     const getUserProfitByEmail = async (email: string) => {
@@ -212,7 +231,19 @@ function Dashboard() {
                             </th>
 
                             <th className="p-5">
+                                Yesterday's Price
+                            </th>
+
+                            <th className="p-5">
                                 Current Price
+                            </th>
+
+                            <th className="p-5">
+                                Difference
+                            </th>
+
+                            <th className="p-5">
+                                %
                             </th>
 
                             <th className="p-5">
@@ -226,8 +257,83 @@ function Dashboard() {
                             userPortfolio?.map((element: UserPortfolio, index: number) => (
                                 <tr key={index}>
                                     <td className="p-5"><span className="font-bold text-blue-800 underline"><Link to={`/stockDetailedInfo/${element.stockName}`}>{element.stockName}</Link></span></td>
-                                    <td className="p-5">{element.stockQuantity}</td>
-                                    <td className="p-5 font-bold">${(element.stockPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                                    <td className="p-5 font-bold underline">{element.stockQuantity}</td>
+                                    <motion.td
+                                        initial={{
+                                            opacity: 0,
+                                            translateX: -100,
+                                            scale: 0.9
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            translateX: 0,
+                                            scale: 1
+                                        }}
+                                        transition={{
+                                            duration: 1,
+                                        }}
+                                        className="p-5 font-bold" style={{
+                                            color: `${element.stockPriceYesterday! < 0 ? '#991b1b' : ''}`
+                                        }}>
+                                        ${(element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 })}</motion.td>
+                                    <motion.td
+                                        initial={{
+                                            opacity: 0,
+                                            translateX: -100,
+                                            scale: 0.9
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            translateX: 0,
+                                            scale: 1
+                                        }}
+                                        transition={{
+                                            duration: 1,
+                                        }}
+                                        className="p-5 font-bold"
+                                        style={{
+                                            color: `${element.stockPrice < 0 ? '#991b1b' : ''}`
+                                        }}>${(element.stockPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}</motion.td>
+                                    <motion.td
+                                        initial={{
+                                            opacity: 0,
+                                            translateX: -100,
+                                            scale: 0.9
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            translateX: 0,
+                                            scale: 1
+                                        }}
+                                        transition={{
+                                            duration: 1,
+                                        }}
+                                        className="p-5 font-bold"
+                                        style={{
+                                            color: `${(element.stockPrice - element.stockPriceYesterday!) < 0 ? '#991b1b' : 'green'}`
+                                        }}>
+                                        {(element.stockPrice - element.stockPriceYesterday!) > 0 ? '+' : ''} {(element.stockPrice - element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                    </motion.td>
+                                    <motion.td
+                                        initial={{
+                                            opacity: 0,
+                                            translateX: -100,
+                                            scale: 0.9
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            translateX: 0,
+                                            scale: 1
+                                        }}
+                                        transition={{
+                                            duration: 1,
+                                        }}
+                                        className="p-5 font-bold"
+                                        style={{
+                                            color: `${((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice) < 0 ? '#991b1b' : 'green'}`
+                                        }}>
+                                        {((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice) > 0 ? '+' : ''}{((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice).toFixed(2)}%
+                                    </motion.td>
                                     <td><div className="flex flex-row justify-evenly">
                                         <button onClick={() => handleOnClickCalculate(element)} className="btn-dark w-40" type="button"><FontAwesomeIcon icon={faCalculator} /> Calculate Pricing</button>
                                         <button onClick={async () => handleOnClickSellStockModal(element)} className="btn-success" type="button"><FontAwesomeIcon icon={faHandHoldingDollar} /> Sell Stocks</button>

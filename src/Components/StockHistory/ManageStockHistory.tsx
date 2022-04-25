@@ -253,6 +253,20 @@ function ManageStockHistory() {
                             }).catch(err => {
                                 console.log(err);
                             });
+
+                            stocks[i].stockPrice = editedStock.stockPrice;
+                            await axios.put(`${STOCK_URL}/${stocks[i].stockName}`, stocks[i]).then(response => {
+                                console.log(response);
+                            }).catch(err => {
+                                console.log(err);
+                            });
+
+                            const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
+                            for (let i = 0; i < userPortfolios.data.length; i++) {
+                                let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
+                                modifiedUserPortfolio.stockPrice = editedStock.stockPrice;
+                                await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
+                            }
                         } else {
                             let newStockHistory: StockHistory = {
                                 stockId: 0,
@@ -265,6 +279,20 @@ function ManageStockHistory() {
                             }).catch(err => {
                                 console.log(err);
                             });
+
+                            stocks[i].stockPrice = newStockHistory.stockPrice;
+                            await axios.put(`${STOCK_URL}/${stockToday.data.stockName}`, stocks[i]).then(response => {
+                                console.log(response);
+                            }).catch(err => {
+                                console.log(err);
+                            });
+
+                            const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
+                            for (let i = 0; i < userPortfolios.data.length; i++) {
+                                let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
+                                modifiedUserPortfolio.stockPrice = stocks[i].stockPrice
+                                await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
+                            }
                         }
                     }
                 }
