@@ -53,12 +53,19 @@ interface UserProfile {
     fullName?: string
 }
 
+interface UserProfitHistory {
+    email: string,
+    money: number,
+    transactionDate: string
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 const STOCK_BOUGHT_URL = `${process.env.REACT_APP_API_URL}/StockBoughts`;
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
+const USER_PROFIT_HISTORY_URL = `${process.env.REACT_APP_API_URL}/UserProfitHistories`;
 
 function BuyStock() {
     const params = useParams();
@@ -158,6 +165,15 @@ function BuyStock() {
                                 }).catch(err => {
                                     console.log(err);
                                 });
+
+                                let userProfitHistory: UserProfitHistory = {
+                                    email: currentUser,
+                                    money: money - (stock.stockPrice * quantity),
+                                    transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                                }
+
+                                await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);
+
                             } else {
                                 let newUserProfit: UserProfit = {
                                     email: currentUser,
@@ -205,6 +221,14 @@ function BuyStock() {
                                 }).catch(err => {
                                     console.log(err);
                                 });
+
+                                let userProfitHistory: UserProfitHistory = {
+                                    email: currentUser,
+                                    money: money - (stock.stockPrice * quantity),
+                                    transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                                }
+
+                                await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);
                             }
                         } else {
                             Swal.fire({

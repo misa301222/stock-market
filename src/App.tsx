@@ -20,6 +20,7 @@ import UserProfile from './Components/UserProfile/UserProfile';
 import EditProfileInfo from './Components/UserProfile/EditProfileInfo';
 import SearchUsers from './Components/UserProfile/SearchUsers';
 import { useLayoutEffect } from 'react';
+import UserProfileHistory from './Components/UserProfile/UserProfileHistory';
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,7 @@ function App() {
           <Route path='/stockDetailedInfo/:stockName' element={<RequireAuth redirectTo='/login'><StockDetailedInfo /></RequireAuth>} />
           <Route path='/userProfile/:email' element={<RequireAuth redirectTo='/login'><UserProfile /></RequireAuth>} />
           <Route path='/settings/editProfileInfo/' element={<RequireAuth redirectTo='/login'><EditProfileInfo /></RequireAuth>} />
+          <Route path='/settings/moneyHistory/' element={<RequireAuth redirectTo='/login'><UserProfileHistory /></RequireAuth>} />
         </Routes>
       </Wrapper>
     </div>

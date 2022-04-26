@@ -1,4 +1,4 @@
-import { faCalculator, faFolderOpen, faGaugeHigh, faHandHoldingDollar, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import { faCalculator, faDollarSign, faFolderOpen, faGaugeHigh, faHandHoldingDollar, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
@@ -50,12 +50,19 @@ interface StockHistory {
     stockPrice: number
 }
 
+interface UserProfitHistory {
+    email: string,
+    money: number,
+    transactionDate: string
+}
+
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
+const USER_PROFIT_HISTORY_URL = `${process.env.REACT_APP_API_URL}/UserProfitHistories`;
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -72,14 +79,6 @@ function Dashboard() {
     const variants = {
         open: { opacity: 1, display: 'block' },
         closed: { opacity: 0, display: 'none' }
-    }
-
-    const getStockHistoryByStockNameAndDate = async (stockName: string, stockDate: Date) => {
-        await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stockName}/${stockDate}`).then(response => {
-
-        }).catch(err => {
-            console.log(err);
-        });
     }
 
     const getUserProfileByEmail = async (email: string) => {
@@ -160,6 +159,14 @@ function Dashboard() {
                             showConfirmButton: true,
                         });
 
+                        let userProfitHistory: UserProfitHistory = {
+                            email: currentUser,
+                            money: userProfit!.money,
+                            transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                        }
+
+                        await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);
+
                         await getUserProfitByEmail(currentUser);
                         await getUserPortfolioByEmail(currentUser);
 
@@ -186,6 +193,10 @@ function Dashboard() {
         navigate(`/stocksSoldHistory/${stockName}`)
     }
 
+    const handleOnClickMoneyHistory = () => {
+        navigate(`/settings/moneyHistory`)
+    }
+
     useEffect(() => {
         let currentUser: string = authService.getCurrentUser!;
         getUserPortfolioByEmail(currentUser);
@@ -198,6 +209,9 @@ function Dashboard() {
             <div className="container mx-auto">
                 <h1 className="header mt-10">Your Dashboard <FontAwesomeIcon icon={faGaugeHigh} /></h1>
                 <hr />
+                <div className="mt-4 flex flex-row justify-end">
+                    <button onClick={() => handleOnClickMoneyHistory()} type="button" className="btn-dark"><FontAwesomeIcon icon={faDollarSign} /> Money History</button>
+                </div>
             </div>
 
             <motion.div
