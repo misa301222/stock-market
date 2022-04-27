@@ -7,6 +7,7 @@ import { animate, motion } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import StockCard from "../Cards/StockCard";
+import moment from "moment";
 
 interface Stock {
     stockName: string,
@@ -15,11 +16,12 @@ interface Stock {
     stockQuantity: number,
     stockLogoURL: string,
     dateAdded: Date,
-    stockOwner: string
+    stockOwner: string,
+    stockPriceYesterday?: number
 }
 
-
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
+const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
 function ManageStocks() {
     const [stocks, setStocks] = useState<Stock[]>();
@@ -40,13 +42,18 @@ function ManageStocks() {
     const getStockByOwnerEmail = async () => {
         let currentUser: string = authService.getCurrentUser!;
         if (currentUser) {
-            await axios.get(`${STOCK_URL}/GetStocksByOwner/${currentUser}`).then(response => {
-                console.log(response);
-                setStocks(response.data);
-                setIsLoading(false);
-            }).catch(err => {
-                console.log(err);
-            });
+            const responseStocks = await axios.get(`${STOCK_URL}/GetStocksByOwner/${currentUser}`);
+            let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+            let stockArray: Stock[] = [];
+            for (let i = 0; i < responseStocks.data.length; i++) {
+                let stock: Stock = responseStocks.data[i];
+
+                const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stock.stockName}/${yesterdayDate}`);
+                stock.stockPriceYesterday = responseStockHistory.data.stockPrice;
+                stockArray.push(stock);
+            }
+            setStocks(stockArray);
+            setIsLoading(false);
         }
     }
 
@@ -115,7 +122,7 @@ function ManageStocks() {
                 <div className="flex flex-wrap gap-10 w-full mx-auto">
 
                     {!isLoading ?
-                        stocks?.length ?
+                        stocks ?
                             stocks.map((element: Stock, index: number) => (
                                 <motion.div
                                     key={index} className=""

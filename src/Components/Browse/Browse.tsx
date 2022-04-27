@@ -6,6 +6,7 @@ import StockCard from "../Cards/StockCard";
 import { motion } from 'framer-motion';
 import { useNavigate } from "react-router-dom";
 import StockCardGold from "../Cards/StockCardGold";
+import moment from "moment";
 
 interface Stock {
     stockName: string,
@@ -14,7 +15,8 @@ interface Stock {
     stockQuantity: number,
     stockLogoURL: string,
     dateAdded: Date,
-    stockOwner: string
+    stockOwner: string,
+    stockPriceYesterday?: number
 }
 
 interface StockBought {
@@ -25,8 +27,16 @@ interface StockBought {
     transactionTotal: number
 }
 
+interface StockHistory {
+    stockId: number,
+    stockName: string,
+    stockDate: any,
+    stockPrice: number
+}
+
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 const STOCK_BOUGHT_URL = `${process.env.REACT_APP_API_URL}/StockBoughts`;
+const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
 function Browse() {
     const [searchStock, setSearchStock] = useState<string>();
@@ -54,11 +64,18 @@ function Browse() {
     const handleOnSubmitSearchForm = async (event: SyntheticEvent) => {
         event.preventDefault();
 
-        await axios.get(`${STOCK_URL}/GetStockByStockNameLike/${searchStock}`).then(response => {
-            setStocks(response.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        const responseStocks = await axios.get(`${STOCK_URL}/GetStockByStockNameLike/${searchStock}`);
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        let stockArray: Stock[] = [];
+        for (let i = 0; i < responseStocks.data.length; i++) {
+            let stock: Stock = responseStocks.data[i];
+
+            const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stock.stockName}/${yesterdayDate}`);
+            stock.stockPriceYesterday = responseStockHistory.data.stockPrice;
+
+            stockArray.push(stock);
+        }
+        setStocks(stockArray);
     }
 
     const handleClickViewInfo = (stockName: string) => {
@@ -66,11 +83,18 @@ function Browse() {
     }
 
     const getStocksLastTwenty = async () => {
-        await axios.get(`${STOCK_URL}/GetStocksLastTwenty`).then(response => {
-            setLastStocks(response.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        const responseLastStocks = await axios.get(`${STOCK_URL}/GetStocksLastTwenty`);
+
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        let lastStocksArray: Stock[] = [];
+        for (let i = 0; i < responseLastStocks.data.length; i++) {
+            let stock: Stock = responseLastStocks.data[i];
+
+            const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stock.stockName}/${yesterdayDate}`);
+            stock.stockPriceYesterday = responseStockHistory.data.stockPrice;
+            lastStocksArray.push(stock);
+        }
+        setLastStocks(lastStocksArray);
     }
 
     const getTrendingStocks = async () => {
@@ -82,7 +106,18 @@ function Browse() {
             stocks.push(stock.data);
         }
 
-        setTrendingStocks(stocks);
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        let stocksTrendingArray: Stock[] = [];
+        for (let i = 0; i < stocks.length; i++) {
+            let stock: Stock = stocks[i];
+
+            const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stock.stockName}/${yesterdayDate}`);
+            stock.stockPriceYesterday = responseStockHistory.data.stockPrice;
+
+            stocksTrendingArray.push(stock);
+        }
+
+        setTrendingStocks(stocksTrendingArray);
     }
 
     useEffect(() => {
@@ -172,25 +207,25 @@ function Browse() {
             <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10 justify-center">
                 {
                     trendingStocks?.map((element: Stock, index: number) => (
-                    <motion.div key={index}
-                        whileHover={{
-                            scale: 1.15,
-                            transition: {
-                                type: "spring"
-                            }
-                        }}
-                        initial={{
-                            opacity: 0
-                        }}
-                        animate={{
-                            opacity: 1
-                        }}
-                        className='text-center'
-                        onClick={() => handleOpenModal(element)}
-                    >
-                        <StockCardGold stock={element} />
-                    </motion.div>
-                ))
+                        <motion.div key={index}
+                            whileHover={{
+                                scale: 1.15,
+                                transition: {
+                                    type: "spring"
+                                }
+                            }}
+                            initial={{
+                                opacity: 0
+                            }}
+                            animate={{
+                                opacity: 1
+                            }}
+                            className='text-center'
+                            onClick={() => handleOpenModal(element)}
+                        >
+                            <StockCardGold stock={element} />
+                        </motion.div>
+                    ))
                 }
             </div>
 
@@ -228,9 +263,25 @@ function Browse() {
                                     <div className="mb-2">
                                         <h2><b>Stocks Left:</b> {selectedStock?.stockQuantity}</h2>
                                     </div>
+                                    {
+                                        selectedStock?.stockPriceYesterday ?
+                                            <div className="mb-2">
+                                                <h2><b>Yesterday's Price:</b> ${selectedStock?.stockPriceYesterday!.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h2>
+                                            </div>
+                                            : null
+                                    }
                                     <div className="mb-2">
-                                        <h2><b>Current Price:</b> ${selectedStock?.stockPrice}</h2>
+                                        <h2><b>Current Price:</b> ${selectedStock?.stockPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h2>
                                     </div>
+                                    {
+                                        selectedStock?.stockPriceYesterday ?
+                                            <div className="mb-2">
+                                                <h2><b>Difference:</b> <span style={{
+                                                    color: `${(selectedStock?.stockPrice! - selectedStock?.stockPriceYesterday!) > 0 ? 'green' : 'red'}`
+                                                }}>{(selectedStock?.stockPrice! - selectedStock?.stockPriceYesterday!) > 0 ? '+' : ''}{(selectedStock?.stockPrice! - selectedStock?.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></h2>
+                                            </div>
+                                            : null
+                                    }
                                 </div>
                             </div>
                         </div>

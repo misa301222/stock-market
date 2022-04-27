@@ -123,12 +123,11 @@ function StockDetailedInfo() {
     }
 
     const getStockByStockName = async (stockName: string) => {
-        await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
-            console.log(response);
-            setStock(response.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        const responseStock = await axios.get(`${STOCK_URL}/${stockName}`);
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseStock.data.stockName}/${yesterdayDate}`);
+        responseStock.data.stockPriceYesterday = responseStockHistory.data.stockPrice;
+        setStock(responseStock.data);
     }
 
     const handleOnClickBuyStock = () => {

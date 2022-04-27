@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import authService from "../../Services/auth.service";
 import StockCardBig from "../Cards/StockCardBig";
 import { motion } from 'framer-motion';
+import moment from "moment";
 
 interface StockSold {
     email: string,
@@ -22,11 +23,13 @@ interface Stock {
     stockQuantity: number,
     stockLogoURL: string,
     dateAdded: Date,
-    stockOwner: string
+    stockOwner: string,
+    stockPriceYesterday?: number
 }
 
 const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
+const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
 function StocksSold() {
     const params = useParams();
@@ -51,12 +54,11 @@ function StocksSold() {
     }
 
     const getStockByStockName = async (stockName: string) => {
-        await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
-            console.log(response);
-            setStock(response.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        const responseStock = await axios.get(`${STOCK_URL}/${stockName}`);
+        let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseStock.data.stockName}/${yesterdayDate}`);
+        responseStock.data.stockPriceYesterday = responseStockHistory.data.stockPrice;
+        setStock(responseStock.data);
     }
 
     useEffect(() => {

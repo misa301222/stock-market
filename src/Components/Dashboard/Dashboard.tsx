@@ -289,7 +289,7 @@ function Dashboard() {
                                         className="p-5 font-bold" style={{
                                             color: `${element.stockPriceYesterday! < 0 ? '#991b1b' : ''}`
                                         }}>
-                                        ${(element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 })}</motion.td>
+                                        ${(element.stockPriceYesterday!) ? (element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0'}</motion.td>
                                     <motion.td
                                         initial={{
                                             opacity: 0,
@@ -326,7 +326,7 @@ function Dashboard() {
                                         style={{
                                             color: `${(element.stockPrice - element.stockPriceYesterday!) < 0 ? '#991b1b' : 'green'}`
                                         }}>
-                                        {(element.stockPrice - element.stockPriceYesterday!) > 0 ? '+' : ''} {(element.stockPrice - element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        {(element.stockPrice - element.stockPriceYesterday!) > 0 ? '+' : ''} {(element.stockPriceYesterday!) ? (element.stockPrice - element.stockPriceYesterday!).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0'}
                                     </motion.td>
                                     <motion.td
                                         initial={{
@@ -346,7 +346,7 @@ function Dashboard() {
                                         style={{
                                             color: `${((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice) < 0 ? '#991b1b' : 'green'}`
                                         }}>
-                                        {((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice) > 0 ? '+' : ''}{((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice).toFixed(2)}%
+                                        {((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice) > 0 ? '+' : ''}{(element.stockPriceYesterday!) ? ((element.stockPrice - element.stockPriceYesterday!) * 100 / element.stockPrice).toFixed(2) : '0'}%
                                     </motion.td>
                                     <td><div className="flex flex-row justify-evenly">
                                         <button onClick={() => handleOnClickCalculate(element)} className="btn-dark w-40" type="button"><FontAwesomeIcon icon={faCalculator} /> Calculate Pricing</button>

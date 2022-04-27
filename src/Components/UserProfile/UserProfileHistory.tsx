@@ -123,8 +123,9 @@ function UserProfileHistory() {
                                         }}
                                         className="p-5 font-bold"
                                         style={{
-// TODO FIX THIS
-                                        }}>{((element.money - element.previousMoney!) * 100 / element.money).toFixed(2)}%</motion.td>
+                                            color: `${((element.money - element.previousMoney!) * 100 / element.previousMoney!) > 0 ? 'green' : '#991b1b'}`
+                                        }
+                                        }>{((element.money - element.previousMoney!) * 100 / element.previousMoney!) > 0 ? '+' : ''}{element.previousMoney !== 0 ? ((element.money - element.previousMoney!) * 100 / element.previousMoney!).toFixed(2) : '0'}%</motion.td>
                                 </tr>
                             ))
                         }

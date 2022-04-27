@@ -34,19 +34,46 @@ function StockCardGold({ stock }: any) {
             </div>
 
             <div className="h-[10rem] p-2 mt-2">
-                <img className="h-[9rem] w-[9rem] mx-auto" src={`${stock.stockLogoURL ? stock.stockLogoURL : '/images/NotFound.png'}`} />
+                <img className="h-[9rem] w-[9rem] shadow-md shadow-black mx-auto rounded-md" src={`${stock.stockLogoURL ? stock.stockLogoURL : '/images/NotFound.png'}`} />
             </div>
 
             <div className="">
-                <div className="flex flex-row">
+                {stock.stockPriceYesterday ?
+                    <div className="flex flex-row">
+                        <div className="w-1/2 text-right">
+                            <label>Yesterday's Price: </label>
+                        </div>
+
+                        <div className="w-1/2 text-left">
+                            <label>${(stock.stockPriceYesterday).toLocaleString(undefined, { minimumFractionDigits: 2 })}</label>
+                        </div>
+                    </div>
+                    : null
+                }
+                <div className="flex flex-row underline">
                     <div className="w-1/2 text-right">
-                        <label>Price: </label>
+                        <label>Current Price: </label>
                     </div>
 
                     <div className="w-1/2 text-left">
-                        <label>${stock.stockPrice}</label>
+                        <label>${(stock.stockPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}</label>
                     </div>
                 </div>
+                {stock.stockPriceYesterday ?
+                    <div className="flex flex-row">
+                        <div className="w-1/2 text-right">
+                            <label>Difference: </label>
+                        </div>
+
+                        <div className="w-1/2 text-left">
+                            <label
+                                style={{
+                                    color: `${(stock.stockPrice - stock.stockPriceYesterday) > 0 ? 'green' : 'red'}`
+                                }}>{(stock.stockPrice - stock.stockPriceYesterday) > 0 ? '+' : ''}{(stock.stockPrice - stock.stockPriceYesterday).toLocaleString(undefined, { minimumFractionDigits: 2 })}</label>
+                        </div>
+                    </div>
+                    : null
+                }
 
                 <div className="flex flex-row">
                     <div className="w-1/2 text-right">
@@ -60,7 +87,7 @@ function StockCardGold({ stock }: any) {
 
                 <div className="flex flex-row">
                     <div className="p-3 text-center">
-                        <p className="line-clamp-4">{stock.stockDescription}
+                        <p className="line-clamp-2">{stock.stockDescription}
                         </p>
                     </div>
                 </div>
