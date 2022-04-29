@@ -239,6 +239,7 @@ function BuyStock() {
                                 showConfirmButton: true,
                             });
                         }
+                        setQuantity(0);
                     } else {
                         Swal.fire({
                             position: 'center',
@@ -250,6 +251,10 @@ function BuyStock() {
                 }
             }
         });
+    }
+
+    const handleOnClickFill = () => {
+        setQuantity(Math.floor(userProfit?.money! / stock?.stockPrice!));
     }
 
     const handleClickViewInfo = () => {
@@ -310,10 +315,11 @@ function BuyStock() {
                                 <form onSubmit={handleOnSubmitBuyStock} className="">
                                     <div className="mb-5">
                                         <label className="font-bold">Quantity</label>
-                                        <input onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={99999} className="form-control text-center" />
+                                        <input value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={99999} className="form-control text-center" />
                                     </div>
                                     <div>
                                         <button disabled={quantity < 1} type='submit' className="btn-primary">Buy</button>
+                                        <button onClick={() => handleOnClickFill()} type='button' className="btn-dark mt-2">Fill</button>
                                     </div>
                                 </form>
                             </div>

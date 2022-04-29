@@ -17,6 +17,20 @@ interface UserProfit {
     money: number
 }
 
+interface UserProfile {
+    email: string,
+    profilePictureURL: string,
+    coverPictureURL: string,
+    location: string,
+    aboutMeHeader: string,
+    aboutMeDescription: string,
+    phoneNumber: string,
+    ocupation: string,
+    education: string[],
+    imagesURL: string[]
+}
+
+const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 
 function SignUp() {
@@ -46,7 +60,25 @@ function SignUp() {
                         email: email!,
                         money: 0
                     }
+
+                    let newUserProfile: UserProfile = {
+                        email: email!,
+                        profilePictureURL: '',
+                        coverPictureURL: '',
+                        location: '',
+                        aboutMeHeader: '',
+                        aboutMeDescription: '',
+                        phoneNumber: '',
+                        ocupation: '',
+                        education: [''],
+                        imagesURL: [''],
+                    }
+
                     await axios.post(`${USER_PROFIT_URL}`, newUserProfit);
+                    await axios.post(`${USER_PROFILE_URL}`, newUserProfile).catch(err => {
+                        console.log(err);
+                    });
+
                     Swal.fire({
                         position: 'center',
                         icon: 'success',

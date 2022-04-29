@@ -75,6 +75,8 @@ function Dashboard() {
     const [currentUserPortfolio, setCurrentUserPortfolio] = useState<UserPortfolio>();
     const [selectedPrice, setSelectedPrice] = useState<number>(0);
     const [stockQuantity, setStockQuantity] = useState<number>(0);
+    const [totalQuantity, setTotalQuantity] = useState<number>(0);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     const variants = {
         open: { opacity: 1, display: 'block' },
@@ -99,12 +101,19 @@ function Dashboard() {
 
     const getUserPortfolioByEmail = async (email: string) => {
         let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        let totalQuantity: number = 0;
+        let totalPrice: number = 0;
         const responseUserPortfolio = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmail/${email}`);
         for (let i = 0; i < responseUserPortfolio.data.length; i++) {
             const responseDateYesterday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseUserPortfolio.data[i].stockName}/${yesterdayDate}`);
             responseUserPortfolio.data[i].stockPriceYesterday = responseDateYesterday.data.stockPrice;
+
+            totalQuantity += responseUserPortfolio.data[i].stockQuantity;
+            totalPrice += responseUserPortfolio.data[i].stockPrice;
         }
         setUserPortfolio(responseUserPortfolio.data);
+        setTotalQuantity(totalQuantity);
+        setTotalPrice(totalPrice);
     }
 
     const getUserProfitByEmail = async (email: string) => {
@@ -358,6 +367,18 @@ function Dashboard() {
                             ))
                         }
 
+                    </tbody>
+
+                    <tbody>
+                        <tr className="bg-gray-300">
+                            <td className="p-5 font-bold"></td>
+                            <td className="p-5 font-bold underline">{totalQuantity}</td>
+                            <td className="p-5 font-bold"></td>
+                            <td className="p-5 font-bold underline">${totalPrice}</td>
+                            <td className="p-5 font-bold"></td>
+                            <td className="p-5 font-bold"></td>
+                            <td className="p-5 font-bold text-left"><span className="underline">Your Total Stock Value is:</span> ${(totalPrice * totalQuantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
