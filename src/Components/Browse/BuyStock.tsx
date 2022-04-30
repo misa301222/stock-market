@@ -315,7 +315,7 @@ function BuyStock() {
                                 <form onSubmit={handleOnSubmitBuyStock} className="">
                                     <div className="mb-5">
                                         <label className="font-bold">Quantity</label>
-                                        <input value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={99999} className="form-control text-center" />
+                                        <input value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} type={'number'} max={9999999} className="form-control text-center" />
                                     </div>
                                     <div>
                                         <button disabled={quantity < 1} type='submit' className="btn-primary">Buy</button>

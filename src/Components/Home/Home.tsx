@@ -1,27 +1,79 @@
-import { faCircleInfo, faMoneyBillTrendUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCircleInfo, faMoneyBill1Wave, faMoneyBillTrendUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import authService from '../../Services/auth.service';
 
 function Home() {
-    const [isManageStocksModalOpen, setIsManageStocksModalOpen] = useState<boolean>(false);
-    const [isBuyStocksModalOpen, setIsBuyStocksModalOpen] = useState<boolean>(false);
-    const [isCreateStocksModalOpen, setIsCreateStocksModalOpen] = useState<boolean>(false);
-    const [isSellStocksModalOpen, setIsSellStocksModalOpen] = useState<boolean>(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [currentImage, setCurrentImage] = useState<string>('');
+    const [currentHeader, setCurrentHeader] = useState<string>('');
+    const [currentMessage, setCurrentMessage] = useState<string>('');
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const variants = {
         open: { opacity: 1, display: 'block' },
         closed: { opacity: 0, display: 'none' }
     }
 
+    const imageManageStocks = '/images/ManageStocks.jpg';
+    const headerManageStocks = `Manage Stocks`;
+    const messageManageStocks = `You can manage your stocks, you are your own boss. Buy, manage and sell
+    when stocks are at their maximum.`;
+
+    const imageBuyStocks = '/images/BuyStocks.png';
+    const headerBuyStocks = `Buy Stocks`;
+    const messageBuyStocks = `Buy a lot of Stocks. Make a lot of money.`;
+
+    const imageCreateStocks = '/images/CreateStocks.jpg';
+    const headerCreateStocks = `Create Stocks`;
+    const messageCreateStocks = `Create your own Stocks. Start your carreer in the stock market. Be well known
+    and create and empire.`;
+
+    const imageSellStocks = '/images/SellStocks.jpg';
+    const headerSellStocks = `Sell Stocks`;
+    const messageSellStocks = `Sell stocks in the competition of being a millionaire.`;
+
     const handleOnClickOpenModal = (title: string) => {
         switch (title) {
             case 'Manage Stocks':
-                setIsManageStocksModalOpen(true);
+                setIsOpen(true);
+                setCurrentImage(imageManageStocks);
+                setCurrentHeader(headerManageStocks);
+                setCurrentMessage(messageManageStocks);
+                break;
+
+            case 'Buy Stocks':
+                setIsOpen(true);
+                setCurrentImage(imageBuyStocks);
+                setCurrentHeader(headerBuyStocks);
+                setCurrentMessage(messageBuyStocks);
+                break;
+
+            case 'Create Stocks':
+                setIsOpen(true);
+                setCurrentImage(imageCreateStocks);
+                setCurrentHeader(headerCreateStocks);
+                setCurrentMessage(messageCreateStocks);
+                break;
+
+            case 'Sell Stocks':
+                setIsOpen(true);
+                setCurrentImage(imageSellStocks);
+                setCurrentHeader(headerSellStocks);
+                setCurrentMessage(messageSellStocks);
                 break;
         }
-
     }
+
+    useEffect(() => {
+        const currentUser: string = authService.getCurrentUser!;
+        if (currentUser) {
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     return (
         <div>
@@ -228,7 +280,7 @@ function Home() {
             </div>
 
             <motion.div
-                animate={isManageStocksModalOpen ? "open" : "closed"}
+                animate={isOpen ? "open" : "closed"}
                 variants={variants}
                 transition={{
                     type: 'spring'
@@ -238,25 +290,76 @@ function Home() {
                     <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
                         <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
                             <h5 className="text-xl font-medium leading-normal text-gray-800" id="exampleModalCenteredScrollableLabel">
-                                Manage Stocks <FontAwesomeIcon icon={faCircleInfo} />
+                                {currentHeader} <FontAwesomeIcon icon={faCircleInfo} />
                             </h5>
                             <button type="button"
                                 className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                                onClick={() => setIsManageStocksModalOpen(false)}></button>
+                                onClick={() => setIsOpen(false)}></button>
                         </div>
                         <div className="modal-body relative p-4">
+
+                            <div className='flex flex-row'>
+                                <div className='w-1/3'>
+                                    <img src={currentImage} />
+                                </div>
+
+                                <div className='w-2/3'>
+                                    <h2 className='font-bold'>{currentHeader}</h2>
+                                    <hr className='w-2/3 mx-auto' />
+                                    <div className='pr-20 pl-20'>
+                                        <p className='p-5 text-justify'>{currentMessage}</p>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                         <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md gap-3">
                             <button type="button"
                                 className="btn-secondary"
-                                onClick={() => setIsManageStocksModalOpen(false)}>
+                                onClick={() => setIsOpen(false)}>
                                 Close
                             </button>
                         </div>
                     </div>
                 </div>
             </motion.div>
+
+            <div className='mt-20'>
+                <h1 className='font-bold'>Start becoming a Millonaire Now <FontAwesomeIcon icon={faMoneyBill1Wave} /></h1>
+                <hr />
+                {
+                    !isLoggedIn ?
+                        <div>
+                            <motion.div
+                                whileHover={{
+                                    scale: 1.1,
+                                }}
+                                className='card mt-20 p-5 cursor-pointer hover:text-blue-500 duration-150'>
+                                <h2 onClick={() => navigate('/signUp')} className='font-bold'>Create an Account <FontAwesomeIcon icon={faArrowRight} /></h2>
+                            </motion.div>
+
+                            <div className='mt-10'>
+                                <label className='underline'>Or if you have an account...</label>
+                            </div>
+
+                            <motion.div
+                                whileHover={{
+                                    scale: 1.1,
+                                }}
+                                className='card mt-10 p-5 cursor-pointer hover:text-blue-500 duration-150'>
+                                <h2 onClick={() => navigate('/login')} className='font-bold'>Login <FontAwesomeIcon icon={faArrowRight} /></h2>
+                            </motion.div>
+                        </div>
+                        :
+                        <motion.div
+                            whileHover={{
+                                scale: 1.1,
+                            }}
+                            className='card mt-10 p-5 cursor-pointer hover:text-blue-500 duration-150'>
+                            <h2 onClick={() => navigate('/dashboard')} className='font-bold'>Go to Dashboard <FontAwesomeIcon icon={faArrowRight} /></h2>
+                        </motion.div>
+                }
+            </div>
 
         </div>
     )

@@ -136,6 +136,13 @@ function ManageStockHistory() {
             console.log(err);
         });
 
+        const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${selectedStockHistory.stockName}`);
+        for (let i = 0; i < userPortfolios.data.length; i++) {
+            let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
+            modifiedUserPortfolio.stockPrice = editedStock.stockPrice;
+            await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
+        }
+
         Swal.fire({
             position: 'center',
             icon: 'success',
