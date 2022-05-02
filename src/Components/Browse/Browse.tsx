@@ -174,7 +174,7 @@ function Browse() {
                 <hr />
             </div>
 
-            <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10">
+            <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10 justify-center">
                 {
                     lastStocks?.map((element: Stock, index: number) => (
                         <motion.div key={index}

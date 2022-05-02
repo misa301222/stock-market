@@ -1,4 +1,4 @@
-import { faChartLine, faCompass, faGaugeHigh, faGears, faHome, faHouseChimneyWindow, faMoneyBillTrendUp, faPersonWalkingArrowRight, faRightToBracket, faUser, faUserCheck, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCompass, faGaugeHigh, faGears, faHandHoldingDollar, faHome, faHouseChimneyWindow, faMoneyBillTrendUp, faPersonWalkingArrowRight, faRightToBracket, faUser, faUserCheck, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -29,6 +29,8 @@ function Navbar() {
                             isLoggedIn ?
                                 <div className="navbar-link">
                                     <Link to={'/dashboard'} className="navbar-link"><h5><FontAwesomeIcon icon={faGaugeHigh} /> Dashboard</h5></Link>
+
+                                    <Link to={'/tradeStocks'} className="navbar-link"><h5><FontAwesomeIcon icon={faHandHoldingDollar} /> Trade</h5></Link>
 
                                     <Link to={'/browse'} className="navbar-link"><h5><FontAwesomeIcon icon={faCompass} /> Browse</h5></Link>
 

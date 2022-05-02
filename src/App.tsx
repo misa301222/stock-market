@@ -21,6 +21,11 @@ import EditProfileInfo from './Components/UserProfile/EditProfileInfo';
 import SearchUsers from './Components/UserProfile/SearchUsers';
 import { useLayoutEffect } from 'react';
 import UserProfileHistory from './Components/UserProfile/UserProfileHistory';
+import TradeStock from './Components/TradeStock/TradeStock';
+import NewTradeStock from './Components/TradeStock/NewTradeStock';
+import CurrentTrades from './Components/TradeStock/CurrentTrades';
+import HistoryTradeStocks from './Components/TradeStock/HistoryTradeStocks';
+import TradeStockInfo from './Components/TradeStock/TradeStockInfo';
 
 function App() {
   const location = useLocation();
@@ -48,6 +53,11 @@ function App() {
           <Route path='/dashboard' element={<RequireAuth redirectTo='/login'><Dashboard /></RequireAuth>} />
           <Route path='/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
           <Route path='/newStock' element={<RequireAuth redirectTo='/login'><AddNewStock /></RequireAuth>} />
+          <Route path='/tradeStocks' element={<RequireAuth redirectTo='/login'><TradeStock /></RequireAuth>} />
+          <Route path='/tradeStocks/newTrade' element={<RequireAuth redirectTo='/login'><NewTradeStock /></RequireAuth>} />
+          <Route path='/tradeStocks/currentTrades' element={<RequireAuth redirectTo='/login'><CurrentTrades /></RequireAuth>} />
+          <Route path='/tradeStocks/history' element={<RequireAuth redirectTo='/login'><HistoryTradeStocks /></RequireAuth>} />
+          <Route path='/tradeStocks/newTrade/tradeStockInfo/:email' element={<RequireAuth redirectTo='/login'><TradeStockInfo /></RequireAuth>} />
           <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
           <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
           <Route path='/settings/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
