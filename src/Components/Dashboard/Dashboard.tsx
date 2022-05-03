@@ -26,7 +26,7 @@ interface StockSold {
     email: string,
     stockName: string,
     quantityBought: number,
-    transactionDate: string,
+    transactionDate: Date,
     transactionTotal: number
 }
 
@@ -46,14 +46,14 @@ interface UserProfile {
 interface StockHistory {
     stockId: number,
     stockName: string,
-    stockDate: any,
+    stockDate: Date,
     stockPrice: number
 }
 
 interface UserProfitHistory {
     email: string,
     money: number,
-    transactionDate: string
+    transactionDate: Date
 }
 
 const USER_PORTFOLIOS_URL = `${process.env.REACT_APP_API_URL}/UserPortfolios`;
@@ -155,7 +155,7 @@ function Dashboard() {
                             email: currentUser,
                             stockName: currentUserPortfolio.stockName,
                             quantityBought: quantity,
-                            transactionDate: moment(new Date()).format('YYYY-MM-DD'),
+                            transactionDate: new Date(),
                             transactionTotal: quantity * currentUserPortfolio.stockPrice
                         }
 
@@ -171,7 +171,7 @@ function Dashboard() {
                         let userProfitHistory: UserProfitHistory = {
                             email: currentUser,
                             money: userProfit!.money,
-                            transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                            transactionDate: new Date()
                         }
 
                         await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);

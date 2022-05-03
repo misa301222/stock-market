@@ -128,7 +128,7 @@ function StocksBought() {
                                 <tr key={index}>
                                     <td className="p-5"><span className="font-bold text-blue-800 underline"><Link to={`/stockDetailedInfo/${element.stockName}`}>{element.stockName}</Link></span></td>
                                     <td className="p-5">{element.quantityBought}</td>
-                                    <td className="p-5">{element.transactionDate.split('T')[0]}</td>
+                                    <td className="p-5">{moment(element.transactionDate).local().format('MM/DD/YYYY HH:mm')}</td>
                                     <td className="p-5 font-bold">${(element.transactionTotal).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                     <td className="p-5 font-bold">${(element.transactionTotal / element.quantityBought).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                 </tr>

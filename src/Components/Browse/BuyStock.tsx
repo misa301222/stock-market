@@ -25,7 +25,7 @@ interface StockBought {
     email: string,
     stockName: string,
     quantityBought: number
-    transactionDate: string,
+    transactionDate: Date,
     transactionTotal: number
 }
 
@@ -57,7 +57,7 @@ interface UserProfile {
 interface UserProfitHistory {
     email: string,
     money: number,
-    transactionDate: string
+    transactionDate: Date
 }
 
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
@@ -142,7 +142,8 @@ function BuyStock() {
                                     email: currentUser,
                                     stockName: stock?.stockName!,
                                     quantityBought: quantity,
-                                    transactionDate: moment(new Date()).format('YYYY-MM-DD'),
+                                    //transactionDate: moment(new Date()).format('YYYY-MM-DD'),
+                                    transactionDate: new Date(),
                                     transactionTotal: stock.stockPrice * quantity
                                 }
 
@@ -170,7 +171,8 @@ function BuyStock() {
                                 let userProfitHistory: UserProfitHistory = {
                                     email: currentUser,
                                     money: money - (stock.stockPrice * quantity),
-                                    transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                                    // transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                                    transactionDate: new Date()
                                 }
 
                                 await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);
@@ -185,7 +187,7 @@ function BuyStock() {
                                     email: currentUser,
                                     stockName: stock?.stockName,
                                     quantityBought: quantity,
-                                    transactionDate: moment(new Date()).format('YYYY-MM-DD'),
+                                    transactionDate: new Date(),
                                     transactionTotal: stock.stockPrice * quantity
                                 }
 
@@ -226,7 +228,7 @@ function BuyStock() {
                                 let userProfitHistory: UserProfitHistory = {
                                     email: currentUser,
                                     money: money - (stock.stockPrice * quantity),
-                                    transactionDate: moment(new Date()).format('YYYY-MM-DD')
+                                    transactionDate: new Date()
                                 }
 
                                 await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);

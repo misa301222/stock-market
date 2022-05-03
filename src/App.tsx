@@ -26,6 +26,7 @@ import NewTradeStock from './Components/TradeStock/NewTradeStock';
 import CurrentTrades from './Components/TradeStock/CurrentTrades';
 import HistoryTradeStocks from './Components/TradeStock/HistoryTradeStocks';
 import TradeStockInfo from './Components/TradeStock/TradeStockInfo';
+import ViewTrade from './Components/TradeStock/ViewTrade';
 
 function App() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
           <Route path='/newStock' element={<RequireAuth redirectTo='/login'><AddNewStock /></RequireAuth>} />
           <Route path='/tradeStocks' element={<RequireAuth redirectTo='/login'><TradeStock /></RequireAuth>} />
           <Route path='/tradeStocks/newTrade' element={<RequireAuth redirectTo='/login'><NewTradeStock /></RequireAuth>} />
+          <Route path='/tradeStocks/viewTrade/:tradeStockHistoryId' element={<RequireAuth redirectTo='/login'><ViewTrade /></RequireAuth>} />
           <Route path='/tradeStocks/currentTrades' element={<RequireAuth redirectTo='/login'><CurrentTrades /></RequireAuth>} />
           <Route path='/tradeStocks/history' element={<RequireAuth redirectTo='/login'><HistoryTradeStocks /></RequireAuth>} />
           <Route path='/tradeStocks/newTrade/tradeStockInfo/:email' element={<RequireAuth redirectTo='/login'><TradeStockInfo /></RequireAuth>} />

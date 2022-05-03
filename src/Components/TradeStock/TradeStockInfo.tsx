@@ -117,6 +117,17 @@ function TradeStockInfo() {
                     console.log(err);
                 });
 
+                const response = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmailAndStockName/${userSource?.email}/${selectedStock?.stockName}`);
+                let userPortfolio: UserPortfolio = response.data;
+                userPortfolio.stockQuantity -= quantity;
+                await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userSource?.email}/${selectedStock?.stockName}`, userPortfolio);
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Transaction done succesfully!',
+                    showConfirmButton: true,
+                });
             }
         });
     }
