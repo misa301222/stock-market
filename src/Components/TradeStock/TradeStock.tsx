@@ -12,8 +12,7 @@ function TradeStock() {
                 <hr />
             </div>
 
-            <div className="flex flex-row justify-content-evenly">
-
+            <div className="flex flex-row justify-content-evenly mt-10">
                 <button onClick={() => navigate('newTrade')} className="btn-primary"><FontAwesomeIcon icon={faPlus} /> New Trade</button>
                 <button onClick={() => navigate('currentTrades')} className="btn-primary"><FontAwesomeIcon icon={faList} /> Current Trades</button>
                 <button onClick={() => navigate('history')} className="btn-primary"><FontAwesomeIcon icon={faHistory} /> History</button>

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import authService from "../../Services/auth.service";
 import TradeCard from "../Cards/TradeCard";
 import { motion } from 'framer-motion';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface UserProfile {
     email: string,
@@ -62,23 +62,29 @@ function CurrentTrades() {
 
             <div className="mt-20">
                 {
-                    currentTrades?.map((element: TradeStockHistory, index: number) => (
-                        <motion.div key={index} className='mb-10 cursor-pointer w-fit mx-auto'
-                            initial={{
-                                opacity: 0.4,
-                                translateX: -300
-                            }}
-                            animate={{
-                                opacity: 1,
-                                translateX: 0
-                            }}
-                            whileHover={{
-                                scale: 1.1
-                            }}
-                            onClick={() => navigate(`/tradeStocks/viewTrade/${element.tradeStockHistoryId}`)}>
-                            <TradeCard emailSource={element.sourceEmail} emailDestiny={element.destinyEmail} status={element.status}/>
-                        </motion.div>
-                    ))
+                    currentTrades?.length ?
+                        currentTrades.map((element: TradeStockHistory, index: number) => (
+                            <motion.div key={index} className='mb-10 cursor-pointer w-fit mx-auto'
+                                initial={{
+                                    opacity: 0.4,
+                                    translateX: -300
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    translateX: 0
+                                }}
+                                whileHover={{
+                                    scale: 1.1
+                                }}
+                                onClick={() => navigate(`/tradeStocks/viewTrade/${element.tradeStockHistoryId}`)}>
+                                <TradeCard emailSource={element.sourceEmail} emailDestiny={element.destinyEmail} status={element.status} />
+                            </motion.div>
+                        ))
+                        :
+                        <div>
+                            <h2 className="font-bold text-red-700">It seems there's no current trades going on...</h2>
+                            <Link to={'/tradeStocks'} className='text-4xl font-bold text-blue-500 underline hover:text-blue-800 duration-150 ease-in-out'>Go Back</Link>
+                        </div>
                 }
             </div>
 

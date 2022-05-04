@@ -125,7 +125,9 @@ function StockDetailedInfo() {
     const getStockByStockName = async (stockName: string) => {
         const responseStock = await axios.get(`${STOCK_URL}/${stockName}`);
         let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        // TODO ARREGLAR ESTO
         const responseStockHistory = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseStock.data.stockName}/${yesterdayDate}`);
+        console.log(responseStockHistory.data);
         responseStock.data.stockPriceYesterday = responseStockHistory.data.stockPrice;
         setStock(responseStock.data);
     }

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import moment from "moment";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import authService from "../../Services/auth.service";
 
@@ -51,6 +51,7 @@ function TradeStockInfo() {
     const [selectedStock, setSelectedStock] = useState<UserPortfolio>();
     const [quantity, setQuantity] = useState<number>(0);
     const [price, setPrice] = useState<number>(0);
+    const navigate = useNavigate();
 
     const getUserProfilesSourceAndDestiny = async () => {
         const currentUser: string = authService.getCurrentUser!;
@@ -127,6 +128,8 @@ function TradeStockInfo() {
                     icon: 'success',
                     title: 'Transaction done succesfully!',
                     showConfirmButton: true,
+                }).then(() => {
+                    navigate('/tradeStocks/currentTrades');
                 });
             }
         });
@@ -179,8 +182,8 @@ function TradeStockInfo() {
                 </div>
             </div>
 
-            <div className="mt-20">
-                <div className="flex flex-row justify-content-evenly">
+            <div className="mt-20 container mx-auto">
+                <div className="flex flex-row justify-content-evenly gap-5">
                     <div className="card p-5">
                         <h2 className="font-bold">Your Stocks</h2>
                         <hr />

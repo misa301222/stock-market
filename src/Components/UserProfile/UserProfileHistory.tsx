@@ -10,7 +10,7 @@ interface UserProfitHistory {
     email: string,
     money: number,
     previousMoney?: number,
-    transactionDate: string
+    transactionDate: Date
 }
 
 const USER_PROFIT_HISTORY_URL = `${process.env.REACT_APP_API_URL}/UserProfitHistories`;
@@ -73,7 +73,7 @@ function UserProfileHistory() {
                         {
                             userProfitHistory?.map((element: UserProfitHistory, index: number) => (
                                 <tr key={index}>
-                                    <td className="p-5 font-bold">{element.transactionDate ? moment(element.transactionDate).format('MM/DD/YYYY') : ''}</td>
+                                    <td className="p-5 font-bold">{moment(element.transactionDate).local().format('MM/DD/YYYY HH:mm')}</td>
                                     <motion.td
                                         initial={{
                                             opacity: 0,

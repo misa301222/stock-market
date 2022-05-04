@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import authService from "../../Services/auth.service";
 import { motion } from 'framer-motion';
 import TradeCard from "../Cards/TradeCard";
+import { useNavigate } from "react-router-dom";
 
 interface TradeStockHistory {
     tradeStockHistoryId: number,
@@ -20,11 +21,11 @@ interface TradeStockHistory {
 const TRADE_STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/TradeStockHistories`;
 
 function HistoryTradeStocks() {
+    const navigate = useNavigate();
     const [currentTrades, setCurrentTrades] = useState<TradeStockHistory[]>();
 
-    const getTradeStockHistoriesBySourceEmailAndStatus = async (email: string) => {
-        const status: string = 'CANCELLED';
-        await axios.get(`${TRADE_STOCK_HISTORY_URL}/GetTradeStockHistoriesBySourceEmailAndStatus/${email}/${status}`).then(response => {
+    const getTradeStockHistoriesBySourceEmailAndStatus = async (email: string) => {                
+        await axios.get(`${TRADE_STOCK_HISTORY_URL}/GetDistinctPendingTradeStockHistoriesBySourceEmail/${email}`).then(response => {
             setCurrentTrades(response.data);
         });
     }
@@ -56,7 +57,7 @@ function HistoryTradeStocks() {
                             whileHover={{
                                 scale: 1.1
                             }}
-                        // onClick={() => navigate(`/tradeStocks/viewTrade/${element.tradeStockHistoryId}`)}
+                            onClick={() => navigate(`/tradeStocks/viewTrade/${element.tradeStockHistoryId}`)}
                         >
                             <TradeCard emailSource={element.sourceEmail} emailDestiny={element.destinyEmail} status={element.status} />
                         </motion.div>
