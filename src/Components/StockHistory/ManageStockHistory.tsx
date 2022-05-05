@@ -94,7 +94,7 @@ function ManageStockHistory() {
     const handleOnSubmitNewStockHistory = async (event: SyntheticEvent) => {
         event.preventDefault();
         let addStock: StockHistory = newStockHistory;
-        addStock.stockDate = new Date(addStock.stockDate).toISOString().split('T')[0];
+        addStock.stockDate = new Date(addStock.stockDate);//.toISOString().split('T')[0];
         await axios.post(`${STOCK_HISTORY_URL}/`, addStock).then(response => {
 
         }).catch(err => {
@@ -154,9 +154,9 @@ function ManageStockHistory() {
     }
 
     const handleOnClickUpdateToday = async () => {
-        let dateToday: string = moment(new Date()).format('YYYY-MM-DD');
+        //let dateToday: string = moment(new Date()).format('YYYY-MM-DD');
+        let dateToday: string = new Date().toISOString();
         console.log(dateToday);
-
         const response = await axios.get(`${STOCK_URL}`);
         setStock(response.data);
         if (response.data.length) {
@@ -165,10 +165,13 @@ function ManageStockHistory() {
                 stocks[i] = response.data[i];
 
                 const stockToday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stocks[i].stockName}/${dateToday}`);
+                console.log(stockToday);
                 // IF EXISTS DO A PUT, IF NOT POST
                 if (stockToday.data) {
                     let editedStock: StockHistory = stockToday.data;
-                    editedStock.stockPrice = Math.floor(Math.random() * 2000);
+                    editedStock.stockPrice = Math.floor(Math.random() * 2000) * (Math.floor(Math.random() * 9 + 1) < 8 ? 1 : -1);
+                    editedStock.stockDate = new Date();
+
                     await axios.put(`${STOCK_HISTORY_URL}/${stockToday.data.stockId}`, editedStock).then(response => {
                         console.log(response);
                     }).catch(err => {
@@ -186,6 +189,7 @@ function ManageStockHistory() {
                     for (let i = 0; i < userPortfolios.data.length; i++) {
                         let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
                         modifiedUserPortfolio.stockPrice = editedStock.stockPrice;
+                        console.log('1: ' + modifiedUserPortfolio.stockPrice);
                         await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
                     }
 
@@ -193,7 +197,7 @@ function ManageStockHistory() {
                     let newStockHistory: StockHistory = {
                         stockId: 0,
                         stockName: stocks[i].stockName,
-                        stockDate: dateToday,
+                        stockDate: new Date(),
                         stockPrice: stocks[i].stockPrice
                     }
                     await axios.post(`${STOCK_HISTORY_URL}`, newStockHistory).then(response => {
@@ -202,8 +206,9 @@ function ManageStockHistory() {
                         console.log(err);
                     });
 
-                    stocks[i].stockPrice = newStockHistory.stockPrice;
-                    await axios.put(`${STOCK_URL}/${stockToday.data.stockName}`, stocks[i]).then(response => {
+                    stocks[i].stockPrice = stocks[i].stockPrice;
+
+                    await axios.put(`${STOCK_URL}/${stocks[i].stockName}`, stocks[i]).then(response => {
                         console.log(response);
                     }).catch(err => {
                         console.log(err);
@@ -236,11 +241,17 @@ function ManageStockHistory() {
         let currentDate = moment(fromDate);
         let toDateMoment = moment(toDate);
 
+        let currentDateTypeDate = new Date(Number(fromDate?.split('-')[0]), Number(fromDate?.split('-')[1]) - 1, Number(fromDate?.split('-')[2])).toISOString();
         if (currentDate.isBefore(toDateMoment)) {
             let i = 0;
             while (currentDate.isBefore(toDateMoment, 'day')) {
                 currentDate = moment(fromDate).add(i, 'days');
-                console.log(currentDate.format('YYYY-MM-DD'));
+                let dateUTC = new Date();
+                
+                dateUTC.setUTCMonth(Number(currentDate.month()))
+                dateUTC.setUTCDate(Number(currentDate.day() + 2));
+                dateUTC.setUTCFullYear(Number(currentDate.year()));
+                currentDateTypeDate = dateUTC.toISOString();
 
                 const response = await axios.get(`${STOCK_URL}`);
                 setStock(response.data);
@@ -249,11 +260,12 @@ function ManageStockHistory() {
                     for (let i = 0; i < response.data.length; i++) {
                         stocks[i] = response.data[i];
 
-                        const stockToday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stocks[i].stockName}/${currentDate.format('YYYY-MM-DD')}`);
+                        //const stockToday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stocks[i].stockName}/${currentDate.format('YYYY-MM-DD')}`);
+                        const stockToday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${stocks[i].stockName}/${currentDateTypeDate}`);
                         // IF EXISTS DO A PUT, IF NOT POST
                         if (stockToday.data) {
                             let editedStock: StockHistory = stockToday.data;
-                            editedStock.stockDate = currentDate.format('YYYY-MM-DD');
+                            editedStock.stockDate = currentDateTypeDate;
                             editedStock.stockPrice = Math.floor(Math.random() * 2000) * (Math.floor(Math.random() * 9 + 1) < 8 ? 1 : -1);
                             await axios.put(`${STOCK_HISTORY_URL}/${stockToday.data.stockId}`, editedStock).then(response => {
                                 console.log(response);
@@ -278,7 +290,7 @@ function ManageStockHistory() {
                             let newStockHistory: StockHistory = {
                                 stockId: 0,
                                 stockName: stocks[i].stockName,
-                                stockDate: currentDate.format('YYYY-MM-DD'),
+                                stockDate: currentDateTypeDate,
                                 stockPrice: Math.floor(Math.random() * 2000)
                             }
                             await axios.post(`${STOCK_HISTORY_URL}`, newStockHistory).then(response => {
@@ -288,7 +300,7 @@ function ManageStockHistory() {
                             });
 
                             stocks[i].stockPrice = newStockHistory.stockPrice;
-                            await axios.put(`${STOCK_URL}/${stockToday.data.stockName}`, stocks[i]).then(response => {
+                            await axios.put(`${STOCK_URL}/${stocks[i].stockName}`, stocks[i]).then(response => {
                                 console.log(response);
                             }).catch(err => {
                                 console.log(err);
@@ -297,7 +309,7 @@ function ManageStockHistory() {
                             const userPortfolios = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserProfitByStockName/${stocks[i].stockName}`);
                             for (let i = 0; i < userPortfolios.data.length; i++) {
                                 let modifiedUserPortfolio: UserPortfolio = userPortfolios.data[i];
-                                modifiedUserPortfolio.stockPrice = stocks[i].stockPrice
+                                modifiedUserPortfolio.stockPrice = newStockHistory.stockPrice
                                 await axios.put(`${USER_PORTFOLIOS_URL}/UpdateUserPortfolio/${userPortfolios.data[i].email}/${userPortfolios.data[i].stockName}`, modifiedUserPortfolio);
                             }
                         }
@@ -345,9 +357,9 @@ function ManageStockHistory() {
             </form>
 
             <div className="flex flex-row w-full gap-5 ml-auto mt-2 justify-evenly">
-                <button type="button" onClick={handleOnClickUpdateToday} className="btn-primary"><FontAwesomeIcon icon={faArrowRotateRight} /> Update Today</button>
-                <button type="button" onClick={handleOnClickOpenUpdateRangeModal} className="btn-primary"><FontAwesomeIcon icon={faArrowRotateRight} /> Update Range</button>
-                <button type="button" onClick={handleOnClickAddNewStockHistory} className="btn-primary"><FontAwesomeIcon icon={faPlus} /> Add</button>
+                <button type="button" onClick={async () => handleOnClickUpdateToday()} className="btn-primary"><FontAwesomeIcon icon={faArrowRotateRight} /> Update Today</button>
+                <button type="button" onClick={async () => handleOnClickOpenUpdateRangeModal()} className="btn-primary"><FontAwesomeIcon icon={faArrowRotateRight} /> Update Range</button>
+                <button type="button" onClick={async () => handleOnClickAddNewStockHistory()} className="btn-primary"><FontAwesomeIcon icon={faPlus} /> Add</button>
             </div>
 
             <div className="mt-10">

@@ -101,11 +101,14 @@ function Dashboard() {
 
     const getUserPortfolioByEmail = async (email: string) => {
         let yesterdayDate: string = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+        let yesterdayDateTypeDate = new Date();
+        yesterdayDateTypeDate.setDate(yesterdayDateTypeDate.getDate() - 1);
+
         let totalQuantity: number = 0;
         let totalPrice: number = 0;
         const responseUserPortfolio = await axios.get(`${USER_PORTFOLIOS_URL}/GetUserPortfolioByEmail/${email}`);
         for (let i = 0; i < responseUserPortfolio.data.length; i++) {
-            const responseDateYesterday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseUserPortfolio.data[i].stockName}/${yesterdayDate}`);
+            const responseDateYesterday = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAndDate/${responseUserPortfolio.data[i].stockName}/${yesterdayDateTypeDate.toISOString()}`);
             responseUserPortfolio.data[i].stockPriceYesterday = responseDateYesterday.data.stockPrice;
 
             totalQuantity += responseUserPortfolio.data[i].stockQuantity;
