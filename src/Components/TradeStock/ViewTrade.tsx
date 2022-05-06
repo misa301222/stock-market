@@ -98,6 +98,7 @@ function ViewTrade() {
 
                 const responseEnoughMoney = await axios.get(`${USER_PROFIT_URL}/${currentTrade?.destinyEmail}`);
                 let totalToPay: number = (currentTrade?.stockPrice! * currentTrade?.stockQuantity!);
+                let money: number = responseEnoughMoney.data.money;
 
                 if (totalToPay <= responseEnoughMoney.data.money) {
                     console.log(userPortfolioResponse.data);
@@ -129,20 +130,23 @@ function ViewTrade() {
 
                     let userProfitHistory: UserProfitHistory = {
                         email: currentTrade?.destinyEmail!,
-                        money: (currentTrade?.stockPrice! * currentTrade?.stockQuantity!),
+                        money: money - (currentTrade?.stockPrice! * currentTrade?.stockQuantity!),
                         transactionDate: new Date()
                     }
 
                     console.log(userProfitHistory);
 
                     const responseEnoughMoneySource = await axios.get(`${USER_PROFIT_URL}/${currentTrade?.sourceEmail}`);
+                    const moneySource: number = responseEnoughMoneySource.data.money;
                     let userProfitHistorySource: UserProfitHistory = {
                         email: currentTrade?.sourceEmail!,
-                        money: (currentTrade?.stockPrice! * currentTrade?.stockQuantity!),
+                        money: moneySource + (currentTrade?.stockPrice! * currentTrade?.stockQuantity!),
                         transactionDate: new Date()
                     }
 
-                    console.log(userProfitHistorySource);
+                    let newUserProfitDestiny: UserProfit = responseEnoughMoneySource.data;
+                    newUserProfitDestiny.money += (currentTrade?.stockPrice! * currentTrade?.stockQuantity!);
+                    await axios.put(`${USER_PROFIT_URL}/${currentTrade?.sourceEmail}`, newUserProfitDestiny);
 
                     await axios.post(`${USER_PROFIT_HISTORY_URL}/`, userProfitHistory);
                     await axios.post(`${USER_PROFIT_HISTORY_URL}/`, userProfitHistorySource);

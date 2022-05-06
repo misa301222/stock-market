@@ -1,6 +1,7 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
 
 interface UserProfile {
@@ -19,21 +20,22 @@ interface UserProfile {
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 
-function TradeCard({ emailSource, emailDestiny, status }: any) {
+function TradeCard({ tradeElement }: any) {
     const [userSource, setUserSource] = useState<UserProfile>();
     const [userDestiny, setUserDestiny] = useState<UserProfile>();
 
     const getUserProfilesSourceAndDestiny = async () => {
-        const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${emailSource}`);
-        await axios.get(`${USER_PROFILE_URL}/${emailSource}`).then(response => {
+        console.log(tradeElement.sourceEmail);
+        const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${tradeElement.sourceEmail}`);
+        await axios.get(`${USER_PROFILE_URL}/${tradeElement.sourceEmail}`).then(response => {
             response.data.fullName = responseUser.data.dataSet.fullName;
             setUserSource(response.data);
         }).catch(err => {
             console.log(err);
         });
 
-        const responseUserDestiny = await axios.get(`${USER_URL}/GetCurrentUser/${emailDestiny}`);
-        await axios.get(`${USER_PROFILE_URL}/${emailDestiny}`).then(response => {
+        const responseUserDestiny = await axios.get(`${USER_URL}/GetCurrentUser/${tradeElement.destinyEmail}`);
+        await axios.get(`${USER_PROFILE_URL}/${tradeElement.destinyEmail}`).then(response => {
             response.data.fullName = responseUserDestiny.data.dataSet.fullName;
             setUserDestiny(response.data);
         }).catch(err => {
@@ -47,7 +49,7 @@ function TradeCard({ emailSource, emailDestiny, status }: any) {
 
     return (
         <div>
-            <h2 className="mb-2 font-bold italic bg-blue-400 rounded-md">{status!}</h2>
+            <h2 className="mb-2 font-bold italic bg-blue-400 rounded-md">{tradeElement?.status!} {tradeElement.status ? ` on ${moment(tradeElement.transactionDate).format('MM/DD/YYYY HH:mm')}` : ''}</h2>
             <div className="card flex flex-row justify-content-evenly p-5 items-center">
                 <div>
                     <div style={{

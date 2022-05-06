@@ -59,7 +59,7 @@ function HistoryTradeStocks() {
                             }}
                             onClick={() => navigate(`/tradeStocks/viewTrade/${element.tradeStockHistoryId}`)}
                         >
-                            <TradeCard emailSource={element.sourceEmail} emailDestiny={element.destinyEmail} status={element.status} />
+                            <TradeCard tradeElement={element} />
                         </motion.div>
                     ))
                 }

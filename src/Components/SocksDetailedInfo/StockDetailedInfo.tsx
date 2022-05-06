@@ -41,12 +41,16 @@ function StockDetailedInfo() {
         Chart.register(...registerables);
 
         const response = await axios.get(`${STOCK_HISTORY_URL}/GetStockHistoryByStockNameAscending/${params.stockName}`);
+        console.log('buid');
+        console.log(response.data);
 
         let dates: string[] = [];
         let values: number[] = [];
         for (let i = 0; i < response.data.length; i++) {
-            dates[i] = moment(response.data[i].stockDate).format('MM/DD/YYYY');
+            
+            dates[i] = moment(response.data[i].stockDate).format('MM/DD/YYYY');            
             values[i] = response.data[i].stockPrice;
+            console.log(dates[i], values[i]);
         }
 
         const data = {
