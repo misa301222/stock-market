@@ -53,7 +53,7 @@ function TradeCard({ tradeElement }: any) {
             <div className="card flex flex-row justify-content-evenly p-5 items-center">
                 <div>
                     <div style={{
-                        backgroundImage: `url(${userSource?.profilePictureURL})`,
+                        backgroundImage: `url(${userSource?.profilePictureURL ? userSource.profilePictureURL : '/images/NotFound.png'})`,
                         backgroundSize: 'cover',
                         height: '10rem',
                         width: '10rem',
@@ -72,7 +72,7 @@ function TradeCard({ tradeElement }: any) {
                 </div>
                 <div>
                     <div style={{
-                        backgroundImage: `url(${userDestiny?.profilePictureURL})`,
+                        backgroundImage: `url(${userDestiny?.profilePictureURL ? userDestiny.profilePictureURL : '/images/NotFound.png'})`,
                         backgroundSize: 'cover',
                         height: '10rem',
                         width: '10rem',

@@ -50,6 +50,17 @@ interface StockHistory {
     stockPrice: number
 }
 
+interface Stock {
+    stockName: string,
+    stockDescription: string,
+    stockPrice: number,
+    stockQuantity: number,
+    stockLogoURL: string,
+    dateAdded: Date,
+    stockOwner: string,
+    stockPriceYesterday?: number
+}
+
 interface UserProfitHistory {
     email: string,
     money: number,
@@ -62,6 +73,7 @@ const STOCK_SOLD_URL = `${process.env.REACT_APP_API_URL}/StockSolds`;
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
 const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
+const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
 const USER_PROFIT_HISTORY_URL = `${process.env.REACT_APP_API_URL}/UserProfitHistories`;
 
 function Dashboard() {
@@ -181,6 +193,12 @@ function Dashboard() {
 
                         await getUserProfitByEmail(currentUser);
                         await getUserPortfolioByEmail(currentUser);
+
+                        const responseStock = await axios.get(`${STOCK_URL}/${currentUserPortfolio.stockName}`);
+                        let stock: Stock = responseStock.data;
+                        stock.stockQuantity += quantity;
+
+                        await axios.put(`${STOCK_URL}/${stock.stockName}`, stock);
 
                         setIsSellStocksOpen(false);
                         setSellStockQuantity(0);

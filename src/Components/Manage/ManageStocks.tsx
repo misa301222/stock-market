@@ -1,4 +1,4 @@
-import { faArrowTrendUp, faCircleInfo, faFileLines, faPlus, faSuitcase, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowTrendUp, faCircleInfo, faFileLines, faPencilAlt, faPlus, faSuitcase, faTrashAlt, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -78,6 +78,10 @@ function ManageStocks() {
         setSelectedStock(selectedStock);
     }
 
+    const handleOnClickUpdateStock = (stockName: string) => {
+        navigate(`/settings/manageStocks/updateStock/${stockName}`);
+    }
+
     const handleOnClickDeleteStock = async () => {
         console.log(selectedStock);
         if (selectedStock) {
@@ -99,6 +103,12 @@ function ManageStocks() {
                     });
 
                     await getStockByOwnerEmail();
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Transaction done succesfully!',
+                        showConfirmButton: true,
+                    });
                 }
             });
         }
@@ -222,8 +232,9 @@ function ManageStocks() {
                                 <div className="mb-2">
                                     <h3 className="text-gray-200 font-bold">TOOLS <FontAwesomeIcon className="text-amber-300" icon={faWarning} /></h3>
                                 </div>
-                                <div>
-                                    <button onClick={async () => handleOnClickDeleteStock()} type="button" className="btn-danger">Delete Sock</button>
+                                <div className="flex flex-row justify-evenly">
+                                    <button onClick={() => handleOnClickUpdateStock(selectedStock?.stockName!)} type="button" className="btn-warning w-36 font-bold"><FontAwesomeIcon icon={faPencilAlt} /> Update Sock</button>
+                                    <button onClick={async () => handleOnClickDeleteStock()} type="button" className="btn-danger"><FontAwesomeIcon icon={faTrashAlt} /> Delete Sock</button>
                                 </div>
                             </div>
                         </div>

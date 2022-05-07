@@ -1,4 +1,4 @@
-import { faChartLine, faCogs, faDatabase, faDollarSign, faUserGear, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCogs, faDatabase, faDollarSign, faPlusCircle, faUserGear, faWallet } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -27,6 +27,10 @@ function Settings() {
 
     const handleOnClickUserProfitHistory = () => {
         navigate('moneyHistory')
+    }
+
+    const handleOnClickAddStockQuantity = () => {
+        navigate('addStockQuantity')
     }
 
     useEffect(() => {
@@ -59,6 +63,28 @@ function Settings() {
 
                             <div className="border border-gray-300 rounded-md mt-5">
                                 <h5> Manage Stock History </h5>
+                            </div>
+                        </motion.div>
+                        : null
+                }
+
+                {
+                    role === 'ADMINISTRATOR' ?
+                        <motion.div
+                            whileHover={{
+                                scale: 1.1
+                            }}
+                            transition={{
+                                type: "spring"
+                            }}
+                            className="card w-[15rem] p-5 cursor-pointer"
+                            onClick={() => handleOnClickAddStockQuantity()}>
+                            <div className="p-2">
+                                <FontAwesomeIcon className="text-[10rem]" icon={faPlusCircle} />
+                            </div>
+
+                            <div className="border border-gray-300 rounded-md mt-5">
+                                <h5> Add Stock Quantity </h5>
                             </div>
                         </motion.div>
                         : null

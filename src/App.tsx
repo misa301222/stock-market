@@ -27,6 +27,8 @@ import CurrentTrades from './Components/TradeStock/CurrentTrades';
 import HistoryTradeStocks from './Components/TradeStock/HistoryTradeStocks';
 import TradeStockInfo from './Components/TradeStock/TradeStockInfo';
 import ViewTrade from './Components/TradeStock/ViewTrade';
+import UpdateStock from './Components/Manage/UpdateStock';
+import AddStockQuantity from './Components/Manage/AddStockQuantity';
 
 function App() {
   const location = useLocation();
@@ -62,7 +64,9 @@ function App() {
           <Route path='/tradeStocks/newTrade/tradeStockInfo/:email' element={<RequireAuth redirectTo='/login'><TradeStockInfo /></RequireAuth>} />
           <Route path='/settings/manageStockHistory' element={<RequireAuth redirectTo='/login'><ManageStockHistory /></RequireAuth>} />
           <Route path='/settings' element={<RequireAuth redirectTo='/login'><Settings /></RequireAuth>} />
+          <Route path='/settings/addStockQuantity' element={<RequireAuth redirectTo='/login'><AddStockQuantity /></RequireAuth>} />
           <Route path='/settings/manageStocks' element={<RequireAuth redirectTo='/login'><ManageStocks /></RequireAuth>} />
+          <Route path='/settings/manageStocks/updateStock/:stockName' element={<RequireAuth redirectTo='/login'><UpdateStock /></RequireAuth>} />
           <Route path='/settings/manageWallet' element={<RequireAuth redirectTo='/login'><ManageWallet /></RequireAuth>} />
           <Route path='/stocksBoughtHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksBought /></RequireAuth>} />
           <Route path='/stocksSoldHistory/:stockName' element={<RequireAuth redirectTo='/login'><StocksSold /></RequireAuth>} />

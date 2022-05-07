@@ -1,11 +1,9 @@
 import { faBusinessTime } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import moment from "moment";
-import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import authService from "../../Services/auth.service";
 import StockCard from "../Cards/StockCard";
 
 interface Stock {
@@ -18,17 +16,10 @@ interface Stock {
     stockOwner: string
 }
 
-interface StockHistory {
-    stockId: number,
-    stockName: string,
-    stockDate: any,
-    stockPrice: number
-}
-
 const STOCK_URL = `${process.env.REACT_APP_API_URL}/Stocks`;
-const STOCK_HISTORY_URL = `${process.env.REACT_APP_API_URL}/StockHistories`;
 
-function AddNewStock() {
+function UpdateStock() {
+    const params = useParams();
     const navigate = useNavigate();
     const [stock, setStock] = useState<Stock>({
         stockName: '',
@@ -39,6 +30,12 @@ function AddNewStock() {
         dateAdded: '',
         stockOwner: ''
     });
+
+    const getStockByName = async (stockName: string) => {
+        await axios.get(`${STOCK_URL}/${stockName}`).then(response => {
+            setStock(response.data);
+        });
+    }
 
     const handleOnChangeStockName = (event: ChangeEvent<HTMLInputElement>) => {
         setStock(prev => ({ ...prev, stockName: event.target.value }));
@@ -60,61 +57,35 @@ function AddNewStock() {
         setStock(prev => ({ ...prev, stockLogoURL: event.target.value }));
     }
 
-    const saveNewStock = async (newStock: Stock) => {
-        console.log(newStock);
-        await axios.post(`${STOCK_URL}`, newStock).then(response => {
-            console.log(response);
-            Swal.fire({
-                title: 'Stock Added Successfully!',
-                text: "Do you want to add another?",
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!'
-            }).then((result) => {
-                if (result.isDismissed) {
-                    navigate('/newStock');
-                }
-            });
-        }).catch(err => {
-            console.log(err);
+    const handleOnSubmitUpdateStock = async (event: SyntheticEvent) => {
+        event.preventDefault();
+
+        await axios.put(`${STOCK_URL}/${stock.stockName}`, stock);
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Transaction done succesfully!',
+            showConfirmButton: true,
+        }).then(() => {
+            navigate('/settings/manageStocks');
         });
     }
 
-    const handleOnSubmitAddNewStock = async (event: SyntheticEvent) => {
-        event.preventDefault();
-        let currentUser: string = authService.getCurrentUser!;
-        if (currentUser) {
-            let newStock: Stock = stock;
-            newStock.dateAdded = moment(new Date()).format('YYYY-MM-DD');
-            newStock.stockOwner = currentUser;
-            await saveNewStock(newStock);            
-
-            let newStockHistory: StockHistory = {
-                stockId: 0,
-                stockName: newStock.stockName,
-                stockDate: new Date(),
-                stockPrice: newStock.stockPrice
-            }
-
-            await axios.post(`${STOCK_HISTORY_URL}`, newStockHistory).then(response => {
-                console.log(response);
-            }).catch(err => {
-                console.log(err);
-            });
-        }
-    }
+    useEffect(() => {
+        const stockName: string = params.stockName!;
+        getStockByName(stockName);
+    }, []);
 
     return (
         <div>
             <div className="container mx-auto">
-                <h1 className="header mt-10">Add New Stock <FontAwesomeIcon icon={faBusinessTime} /></h1>
+                <h1 className="header mt-10">Update Stock <FontAwesomeIcon icon={faBusinessTime} /></h1>
                 <hr />
             </div>
 
             <div className="mt-16 flex flex-row justify-evenly">
-                <form onSubmit={handleOnSubmitAddNewStock} className="mx-0 card p-5">
+                <form onSubmit={handleOnSubmitUpdateStock} className="mx-0 card p-5">
                     <div className="flex flex-row mb-5">
                         <div className="w-1/5 text-right mr-4">
                             <label>
@@ -123,7 +94,7 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockName} className="form-control" type={'text'} maxLength={40} placeholder='Type a Name' />
+                            <input value={stock.stockName} disabled className="form-control" type={'text'} maxLength={40} placeholder='Type a Name' />
                         </div>
                     </div>
 
@@ -135,7 +106,7 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockDescription} className="form-control" type={'text'} maxLength={80} placeholder='Type a Description' />
+                            <input value={stock.stockDescription} onChange={handleOnChangeStockDescription} className="form-control" type={'text'} maxLength={80} placeholder='Type a Description' />
                         </div>
                     </div>
 
@@ -147,7 +118,7 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockPrice} className="form-control" type={'number'} maxLength={40} placeholder='Type a Price' />
+                            <input value={stock.stockPrice} disabled className="form-control" type={'number'} maxLength={40} placeholder='Type a Price' />
                         </div>
                     </div>
 
@@ -159,7 +130,7 @@ function AddNewStock() {
                         </div>
 
                         <div className="w-4/5">
-                            <input onChange={handleOnChangeStockQuantity} className="form-control" type={'number'} maxLength={40} placeholder='Type your Quantity' />
+                            <input disabled value={stock.stockQuantity} className="form-control" type={'number'} maxLength={40} placeholder='Type your Quantity' />
                         </div>
                     </div>
 
@@ -176,7 +147,7 @@ function AddNewStock() {
                     </div>
 
                     <div className="text-center mt-20 mb-10">
-                        <button type="submit" disabled={!stock.stockName || !stock.stockPrice || !stock.stockQuantity} className="btn-primary">Add New Stock</button>
+                        <button type="submit" disabled={!stock.stockName || !stock.stockPrice || !stock.stockQuantity} className="btn-primary w-40">Update New Stock</button>
                     </div>
 
                     <div className="mt-10 text-left">
@@ -192,8 +163,8 @@ function AddNewStock() {
                 </div>
 
             </div>
-        </div >
+        </div>
     )
 }
 
-export default AddNewStock;
+export default UpdateStock;
