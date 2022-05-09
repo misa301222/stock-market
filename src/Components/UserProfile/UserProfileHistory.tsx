@@ -44,7 +44,7 @@ function UserProfileHistory() {
         <div>
 
             <div className="container mx-auto">
-                <h1 className="header mt-10">Money History<FontAwesomeIcon icon={faDollarSign} /></h1>
+                <h1 className="header mt-10">Money History <FontAwesomeIcon icon={faDollarSign} /></h1>
                 <hr />
             </div>
             <div className="mt-10">

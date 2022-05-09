@@ -398,7 +398,7 @@ function Dashboard() {
                             <td className="p-5 font-bold underline">${totalPrice}</td>
                             <td className="p-5 font-bold"></td>
                             <td className="p-5 font-bold"></td>
-                            <td className="p-5 font-bold text-left"><span className="underline">Your Total Stock Value is:</span> ${(totalPrice * totalQuantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                            <td className="p-5 font-bold text-left"><span className="underline">Your Total Stock Value is:</span> <span style={{ color: `${(totalPrice * totalQuantity) < 0 ? 'red' : 'green'}` }}>${(totalPrice * totalQuantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></td>
                         </tr>
                     </tbody>
                 </table>

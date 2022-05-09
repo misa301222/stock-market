@@ -24,9 +24,17 @@ interface UserProfile {
     fullName?: string
 }
 
+interface UserProfitHistory {
+    email: string,
+    money: number,
+    transactionDate: Date
+}
+
+
 const USER_PROFIT_URL = `${process.env.REACT_APP_API_URL}/UserProfits`;
 const USER_PROFILE_URL = `${process.env.REACT_APP_API_URL}/UserProfiles`;
 const USER_URL = `${process.env.REACT_APP_API_URL}/User`;
+const USER_PROFIT_HISTORY_URL = `${process.env.REACT_APP_API_URL}/UserProfitHistories`;
 
 function ManageWallet() {
     const [userProfit, setUserProfit] = useState<UserProfit>();
@@ -76,6 +84,13 @@ function ManageWallet() {
                         console.log(err);
                     });
 
+                    let userProfitHistory: UserProfitHistory = {
+                        email: userProfit.email,
+                        money: userProfit.money + money,
+                        transactionDate: new Date()
+                    }
+
+                    await axios.post(`${USER_PROFIT_HISTORY_URL}`, userProfitHistory);
                     await getUserProfitByEmail(userProfit.email);
 
                     Swal.fire({

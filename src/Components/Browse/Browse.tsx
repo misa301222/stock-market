@@ -199,10 +199,14 @@ function Browse() {
                 }
             </div>
 
-            <div className="container mx-auto">
-                <h2 className="header mt-10">Trending <FontAwesomeIcon icon={faFireAlt} /></h2>
-                <hr />
-            </div>
+            {
+                trendingStocks?.length ?
+                    <div className="container mx-auto">
+                        <h2 className="header mt-10">Trending <FontAwesomeIcon icon={faFireAlt} /></h2>
+                        <hr />
+                    </div>
+                    : null
+            }
 
             <div className="flex flex-wrap gap-10 w-4/5 mx-auto mt-10 justify-center">
                 {

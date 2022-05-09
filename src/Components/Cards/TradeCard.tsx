@@ -25,7 +25,6 @@ function TradeCard({ tradeElement }: any) {
     const [userDestiny, setUserDestiny] = useState<UserProfile>();
 
     const getUserProfilesSourceAndDestiny = async () => {
-        console.log(tradeElement.sourceEmail);
         const responseUser = await axios.get(`${USER_URL}/GetCurrentUser/${tradeElement.sourceEmail}`);
         await axios.get(`${USER_PROFILE_URL}/${tradeElement.sourceEmail}`).then(response => {
             response.data.fullName = responseUser.data.dataSet.fullName;
