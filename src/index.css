@@ -8,10 +8,19 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f8f8;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @layer base {
@@ -25,14 +34,63 @@ code {
   h3 {
     @apply text-2xl;
   }
+
+  h5{
+    @apply text-sm font-bold;
+  }
+
+  label {
+    @apply font-bold;
+  }
 }
 
 @layer components {
+
+  .header {
+    @apply font-bold;
+  }
+
+  .navbar-link {
+    @apply block mt-4 lg:inline-block lg:mt-0 mr-4 p-2 text-black hover:text-white ease-in-out duration-300;
+  }
+
+  .card {
+    @apply lg:w-[60rem] md:w-[45rem] w-[30rem] h-auto border border-gray-300 shadow-lg mx-auto bg-gray-50 rounded-md;
+  }
+
+  .btn-dark {
+    @apply disabled:opacity-75 disabled:hover:text-slate-100 disabled:bg-gray-800 bg-gray-700 ease-in-out text-slate-100 duration-300 hover:text-white hover:bg-gray-900 w-36 h-10 font-bold shadow-md shadow-gray-300 rounded-md;
+  }
+
+  .btn-success {
+    @apply disabled:opacity-75 disabled:hover:text-slate-100 disabled:bg-teal-800 bg-teal-700 ease-in-out text-slate-100 duration-300 hover:text-white hover:bg-teal-900 w-36 h-10 font-bold shadow-md shadow-gray-300 rounded-md;
+  }
+
   .btn-primary {
-    @apply disabled:opacity-75 disabled:bg-blue-900 bg-blue-900 ease-in-out text-slate-100 duration-300 hover:text-slate-300 hover:bg-slate-900 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+    @apply disabled:opacity-75 disabled:hover:text-slate-100 disabled:bg-pink-800 bg-pink-800 ease-in-out text-slate-100 duration-300 hover:text-white hover:bg-pink-900 w-36 h-10 font-bold shadow-md shadow-gray-300 rounded-md;
   }
 
   .btn-secondary {
-    @apply disabled:opacity-75 disabled:bg-neutral-400 bg-neutral-300 ease-in-out text-black duration-300 hover:text-black hover:bg-neutral-500 w-36 h-10 font-bold shadow-lg shadow-black/50 rounded-lg;
+    @apply disabled:opacity-75 disabled:bg-neutral-400 bg-neutral-300 ease-in-out text-black duration-300 hover:text-black hover:bg-neutral-500 w-36 h-10 font-bold shadow-lg shadow-gray-300 rounded-md;
+  }
+
+  .btn-danger {
+    @apply p-2 rounded-md text-white bg-red-500 shadow-md font-bold ease-in-out hover:duration-300 hover:bg-red-700;
+  }
+
+  .btn-warning {
+    @apply p-2 w-20 shadow-black/50 shadow-md rounded-lg hover:ease-in-out duration-300 bg-amber-400 hover:bg-amber-600;
+  }
+
+  .form-control {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight outline-blue-700 focus:outline-blue-300 focus:ease-in-out focus:duration-300 caret-pink-500;
+  }
+
+  .stock-card {
+    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-gray-200 via-white to-gray-200;
+  }
+
+  .stock-card-gold {
+    @apply border rounded-md border-gray-300 w-[20rem] h-[25rem] shadow-md mx-auto bg-gradient-to-br from-amber-400 via-amber-200 to-amber-600;
   }
 }
